@@ -91,7 +91,14 @@ abstract class Page
     {
         $title = htmlspecialchars($title);
         header("Content-type: text/html; charset=UTF-8");
-
+        //set html lang
+        echo <<<EOT
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>$title</title>
+EOT;
         // to do: handle all parameters
         // to do: output common beginning of HTML code
     }

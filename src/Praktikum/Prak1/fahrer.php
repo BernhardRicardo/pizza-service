@@ -1,21 +1,21 @@
 <?php declare(strict_types=1);
 // UTF-8 marker äöüÄÖÜß€
 /**
- * Class PageTemplate for the exercises of the EWA lecture
+ * Class Fahrer for the exercises of the EWA lecture
  * Demonstrates use of PHP including class and OO.
  * Implements Zend coding standards.
  * Generate documentation with Doxygen or phpdoc
  *
  * PHP Version 7.4
  *
- * @file     PageTemplate.php
+ * @file     Fahrer.php
  * @package  Page Templates
  * @author   Bernhard Kreling, <bernhard.kreling@h-da.de>
  * @author   Ralf Hahn, <ralf.hahn@h-da.de>
  * @version  3.1
  */
 
-// to do: change name 'PageTemplate' throughout this file
+// to do: change name 'Fahrer' throughout this file
 require_once './Page.php';
 
 /**
@@ -29,7 +29,7 @@ require_once './Page.php';
  * @author   Bernhard Kreling, <bernhard.kreling@h-da.de>
  * @author   Ralf Hahn, <ralf.hahn@h-da.de>
  */
-class Bestellung extends Page
+class Fahrer extends Page
 {
     // to do: declare reference variables for members 
     // representing substructures/blocks
@@ -82,49 +82,9 @@ class Bestellung extends Page
     {
 		$data = $this->getViewData();
         $this->generatePageHeader('to do: change headline'); //to do: set optional parameters
-        echo <<< HTML
-        <section>
-        <h1>SpeiseKarte</h1>
-        <img
-            width="100"
-            height="100"
-            src="../images/41J3qSlgJiL.jpg"
-            alt="Pizza Margharita"
-        >
-        <h2>Margharita</h2>
-        <h3>$ 4.00</h3>
-        <img
-            width="100"
-            height="100"
-            src="../images/41J3qSlgJiL.jpg"
-            alt="Pizza Salami"
-        >
-        <h2>Salami</h2>
-        <h3>$ 4.50</h3>
-        <img
-            width="100"
-            height="100"
-            src="../images/41J3qSlgJiL.jpg"
-            alt="Pizza Hawai"
-        >
-        <h2>Hawai</h2>
-        <h3>$ 5.50</h3>
-        </section>
-        <form action="https://echo.fbi.h-da.de/" method="get">
-        <section>
-            <h1>Warenkorb</h1>
-            <select name="pizza" multiple>
-            <option value="Salami" id="pizza1">Salami</option>
-            <option value="Margahrita" id="pizza2">Margharita</option>
-            <option value="Hawai">Hawai</option>
-            </select>
-            <input name="Adresse" type="text" value="" placeholder="ihre Adresse" >
-            <button tabindex="1" accesskey="l">Alle Loeschen</button>
-            <button tabindex="2" accesskey="a">Auswahl Loeschen</button>
-            <input type="submit" value="Bestellen" >
-        </section>
-        </form>
-        HTML;
+        echo <<<HTML
+        <h1>Fahrer</h1>
+HTML;
         // to do: output view of this page
         $this->generatePageFooter();
     }
@@ -155,7 +115,7 @@ class Bestellung extends Page
     public static function main():void
     {
         try {
-            $page = new Bestellung();
+            $page = new Fahrer();
             $page->processReceivedData();
             $page->generateView();
         } catch (Exception $e) {
@@ -168,7 +128,7 @@ class Bestellung extends Page
 
 // This call is starting the creation of the page. 
 // That is input is processed and output is created.
-Bestellung::main();
+Fahrer::main();
 
 // Zend standard does not like closing php-tag!
 // PHP doesn't require the closing tag (it is assumed when the file ends). 
