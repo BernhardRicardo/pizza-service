@@ -56,7 +56,7 @@ abstract class Page
         }
         /********************************************/
 
-        $this->_database = new MySQLi($host, "public", "public", "YOUR_DATABASE");
+        $this->_database = new MySQLi($host, "public", "public", "pizzaservice");
 
         if (mysqli_connect_errno()) {
             throw new Exception("Connect failed: " . mysqli_connect_error());
