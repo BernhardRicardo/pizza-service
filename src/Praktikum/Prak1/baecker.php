@@ -86,8 +86,8 @@ class Baecker extends Page
         <h1>Baecker</h1>
         <h2>Bestellung No.17</h2>
         <input type="radio" id="zubereitung" name="pizza" value="Salami">Zubereiten<br>
-        <input type="radio" id="zubereitung" name="pizza" value="Salami">im Ofen<br>
-        <input type="radio" id="zubereitung" name="pizza" value="Salami">abholbereits<br>
+        <input type="radio" id="imOfen" name="pizza" value="Salami">im Ofen<br>
+        <input type="radio" id="abholbereits" name="pizza" value="Salami">abholbereits<br>
         HTML;
         // to do: output view of this page
         $this->generatePageFooter();
