@@ -84,6 +84,8 @@ class Fahrer extends Page
         $this->generatePageHeader('to do: change headline'); //to do: set optional parameters
         echo <<<HTML
         <h1>Fahrer</h1>
+        <h2>Bestellung No.17</h2>
+        <input type="radio" id="abgeholt" name="Bestellung abgeholt" value="radio_group">
 HTML;
         // to do: output view of this page
         $this->generatePageFooter();

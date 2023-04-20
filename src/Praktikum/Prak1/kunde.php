@@ -84,6 +84,18 @@ class Kunde extends Page
         $this->generatePageHeader('to do: change headline'); //to do: set optional parameters
         echo <<<HTML
         <h1>Kunde</h1>
+        <h2>Bestellung No.17</h2>
+        <h4>Name: Bernhard Ricardo Kreling</h4>
+        <h4>Adresse: 12345 Musterstadt, Musterstraße 1</h4>
+        <h4>Telefon: 0123456789</h4>
+        <h4>Bestellnummer: 123456789</h4>
+        <h4>Bestelldatum: 01.01.2021</h4>
+        <h4>Bestellzeit: 12:00</h4>
+        <h4>Bestellstatus: Bestellt</h4>
+        <h4>Bestellung:</h4>
+        <h4>1. Pizza Margherita</h4>
+        <h4>2. Pizza Salami</h4>
+        <h4>3. Pizza Hawaii</h4>
 HTML;
         // to do: output view of this page
         $this->generatePageFooter();
