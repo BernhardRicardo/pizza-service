@@ -93,9 +93,11 @@ class Kunde extends Page
         <h4>Bestellzeit: 12:00</h4>
         <h4>Bestellstatus: Bestellt</h4>
         <h4>Bestellung:</h4>
-        <h4>1. Pizza Margherita</h4>
-        <h4>2. Pizza Salami</h4>
-        <h4>3. Pizza Hawaii</h4>
+        <ol>
+            <li>Pizza Margherita</li>
+            <li>Pizza Salami</li>
+            <li>Pizza Hawaii</li>
+        </ol>
 HTML;
         // to do: output view of this page
         $this->generatePageFooter();

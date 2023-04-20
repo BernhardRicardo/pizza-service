@@ -84,6 +84,10 @@ class Baecker extends Page
         $this->generatePageHeader('to do: change headline'); //to do: set optional parameters
         echo <<<HTML
         <h1>Baecker</h1>
+        <h2>Bestellung No.17</h2>
+        <input type="radio" id="zubereitung" name="pizza" value="Salami">Zubereiten<br>
+        <input type="radio" id="zubereitung" name="pizza" value="Salami">im Ofen<br>
+        <input type="radio" id="zubereitung" name="pizza" value="Salami">abholbereits<br>
         HTML;
         // to do: output view of this page
         $this->generatePageFooter();
