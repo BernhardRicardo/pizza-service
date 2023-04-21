@@ -88,7 +88,7 @@ class Kunde extends Page
         <h4>Name: Bernhard Ricardo Kreling</h4>
         <h4>Adresse: 12345 Musterstadt, Musterstraße 1</h4>
         <h4>Telefon: 0123456789</h4>
-        <h4>Bestellnummer: 123456789</h4>
+        <h4>Bestellnummer: 17</h4>
         <h4>Bestelldatum: 01.01.2021</h4>
         <h4>Bestellzeit: 12:00</h4>
         <h4>Bestellstatus: Bestellt</h4>
