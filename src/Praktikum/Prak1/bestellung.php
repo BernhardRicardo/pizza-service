@@ -118,6 +118,7 @@ class Bestellung extends Page
             <option value="Margahrita" id="pizza2">Margharita</option>
             <option value="Hawai">Hawai</option>
             </select>
+            <input name="Name" type="text" value="" placeholder="Ihr Name" />
             <input name="Adresse" type="text" value="" placeholder="ihre Adresse" >
             <button tabindex="1" accesskey="l">Alle Loeschen</button>
             <button tabindex="2" accesskey="a">Auswahl Loeschen</button>
