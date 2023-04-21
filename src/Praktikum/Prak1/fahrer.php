@@ -81,7 +81,7 @@ class Fahrer extends Page
     protected function generateView():void
     {
 		$data = $this->getViewData();
-        $this->generatePageHeader('to do: change headline'); //to do: set optional parameters
+        $this->generatePageHeader('Fahrer Seite'); //to do: set optional parameters
         echo <<<HTML
         <h1>Fahrer</h1>
         <h2>Bestellung No.17</h2>

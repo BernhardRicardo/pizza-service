@@ -81,7 +81,7 @@ class Bestellung extends Page
     protected function generateView():void
     {
 		$data = $this->getViewData();
-        $this->generatePageHeader('to do: change headline'); //to do: set optional parameters
+        $this->generatePageHeader('Pizza Service'); //to do: set optional parameters
         echo <<< HTML
         <section>
         <h1>SpeiseKarte</h1>
@@ -110,7 +110,7 @@ class Bestellung extends Page
         <h2>Hawai</h2>
         <h3>$ 5.50</h3>
         </section>
-        <form action="https://echo.fbi.h-da.de/" method="get">
+        <form action="https://echo.fbi.h-da.de/" method="post">
         <section>
             <h1>Warenkorb</h1>
             <select name="pizza" multiple>
@@ -122,7 +122,7 @@ class Bestellung extends Page
             <input name="Adresse" type="text" value="" placeholder="ihre Adresse" >
             <button tabindex="1" accesskey="l">Alle Loeschen</button>
             <button tabindex="2" accesskey="a">Auswahl Loeschen</button>
-            <input type="submit" value="Bestellen" >
+            <input type="submit" accesskey="b" value="Bestellen" >
         </section>
         </form>
         HTML;
