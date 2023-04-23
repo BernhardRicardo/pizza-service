@@ -85,8 +85,13 @@ class Fahrer extends Page
         echo <<<HTML
         <h1>Fahrer</h1>
         <h2>Bestellung No.17</h2>
-        <input type="radio" id="abgeholt" name="Bestellung abgeholt" value="abgeholt">Abgeholt<br>
-        <input type="radio" id="ausgeliefert" name="Bestellung ausgeliefert" value="ausgeliefert">Ausgeliefert<br>
+        <form action="https://echo.fbi.h-da.de/" method="post" accept>
+        <section>
+        <input type="radio" id="abgeholt" name="pizza" value="status">Abgeholt<br>
+        <input type="radio" id="ausgeliefert" name="pizza" value="status">Ausgeliefert<br>
+        <input type="submit" value="Submit" value="Status">
+        </section>
+        </form>
 HTML;
         // to do: output view of this page
         $this->generatePageFooter();
