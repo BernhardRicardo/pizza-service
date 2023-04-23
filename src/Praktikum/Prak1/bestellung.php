@@ -90,7 +90,7 @@ class Bestellung extends Page
             height="100"
             src="../images/41J3qSlgJiL.jpg"
             alt="Pizza Margharita"
-        >
+        />
         <h2>Margharita</h2>
         <h3>$ 4.00</h3>
         <img
@@ -98,7 +98,7 @@ class Bestellung extends Page
             height="100"
             src="../images/41J3qSlgJiL.jpg"
             alt="Pizza Salami"
-        >
+        />
         <h2>Salami</h2>
         <h3>$ 4.50</h3>
         <img
@@ -106,14 +106,14 @@ class Bestellung extends Page
             height="100"
             src="../images/41J3qSlgJiL.jpg"
             alt="Pizza Hawai"
-        >
+        />
         <h2>Hawai</h2>
         <h3>$ 5.50</h3>
         </section>
-        <form action="https://echo.fbi.h-da.de/" method="post">
+        <form action="https://echo.fbi.h-da.de/" method="post" accept>
         <section>
             <h1>Warenkorb</h1>
-            <select name="pizza" multiple>
+            <select name="pizza[]" multiple>
             <option value="Salami" id="pizza1">Salami</option>
             <option value="Margahrita" id="pizza2">Margharita</option>
             <option value="Hawai">Hawai</option>
@@ -122,7 +122,7 @@ class Bestellung extends Page
             <input name="Adresse" type="text" value="" placeholder="ihre Adresse" >
             <button tabindex="1" accesskey="l">Alle Loeschen</button>
             <button tabindex="2" accesskey="a">Auswahl Loeschen</button>
-            <input type="submit" accesskey="b" value="Bestellen" >
+            <input  tabindex="3" type="submit" accesskey="b" value="Bestellen" >
         </section>
         </form>
         HTML;
