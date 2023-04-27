@@ -110,8 +110,9 @@ class Bestellung extends Page
         <h2>Hawai</h2>
         <h3>$ 5.50</h3>
         </section>
-        <form action="https://echo.fbi.h-da.de/" method="post" accept>
+       
         <section>
+        <form action="https://echo.fbi.h-da.de/" method="post" accept>
             <h1>Warenkorb</h1>
             <select name="pizza[]" multiple>
             <option value="Salami" id="pizza1">Salami</option>
@@ -123,8 +124,8 @@ class Bestellung extends Page
             <button tabindex="1" accesskey="l">Alle Loeschen</button>
             <button tabindex="2" accesskey="a">Auswahl Loeschen</button>
             <input  tabindex="3" type="submit" accesskey="b" value="Bestellen" >
-        </section>
         </form>
+        </section>
         HTML;
         // to do: output view of this page
         $this->generatePageFooter();

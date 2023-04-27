@@ -64,8 +64,8 @@ class Fahrer extends Page
      */
     protected function getViewData():array
     {
-        $pizza = array();
-        return $pizza;
+        $status = array();
+        return $status;
         // to do: fetch data for this view from the database
 		// to do: return array containing data
     }
@@ -85,13 +85,13 @@ class Fahrer extends Page
         echo <<<HTML
         <h1>Fahrer</h1>
         <h2>Bestellung No.17</h2>
-        <form action="https://echo.fbi.h-da.de/" method="post" accept>
         <section>
-        <input type="radio" id="abgeholt" name="pizza" value="status">Abgeholt<br>
-        <input type="radio" id="ausgeliefert" name="pizza" value="status">Ausgeliefert<br>
+            <form action="https://echo.fbi.h-da.de/" method="post" accept>
+        <input type="radio" id="abgeholt" name="status" value="abgeholt">Abgeholt<br>
+        <input type="radio" id="ausgeliefert" name="status" value="ausgeliefert">Ausgeliefert<br>
         <input type="submit" value="Submit" value="Status">
+            </form>
         </section>
-        </form>
 HTML;
         // to do: output view of this page
         $this->generatePageFooter();

@@ -64,8 +64,8 @@ class Baecker extends Page
      */
     protected function getViewData():array
     {
-        $pizza = array();
-        return $pizza;
+        $status = array();
+        return $status;
         // to do: fetch data for this view from the database
 		// to do: return array containing data
     }
@@ -84,10 +84,15 @@ class Baecker extends Page
         $this->generatePageHeader('Baecker Seite'); //to do: set optional parameters
         echo <<<HTML
         <h1>Baecker</h1>
+        <section>
+        <form action="https://echo.fbi.h-da.de/" method="post" accept>
         <h2>Bestellung No.17</h2>
-        <input type="radio" id="zubereitung" name="pizza" value="Status">Zubereiten<br>
-        <input type="radio" id="imOfen" name="pizza" value="Status">im Ofen<br>
-        <input type="radio" id="abholbereits" name="pizza" value="Status">abholbereits<br>
+        <input type="radio" id="zubereitung" name="status" value="zubereiten">Zubereiten<br>
+        <input type="radio" id="imOfen" name="status" value="imOfen">im Ofen<br>
+        <input type="radio" id="abholbereits" name="status" value="abholbereits">abholbereits<br>
+        <input type="submit" value="Submit" value="Status">
+        </form>
+        </section>
         HTML;
         // to do: output view of this page
         $this->generatePageFooter();
