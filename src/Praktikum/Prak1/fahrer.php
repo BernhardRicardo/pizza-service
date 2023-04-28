@@ -84,11 +84,16 @@ class Fahrer extends Page
         $this->generatePageHeader('Fahrer Seite'); //to do: set optional parameters
         echo <<<HTML
         <h1>Fahrer</h1>
-        <h2>Bestellung No.17</h2>
         <section>
             <form action="https://echo.fbi.h-da.de/" method="post" accept>
-                <h1>Bestellung No.17</h1>
-                <h2>Bestellung No.17</h2>
+                <h1>Bestellung No. 17</h1>
+                <h4>Name: Bernhard Ricardo Kreling</h4>
+                <h4>Adresse: 12345 Musterstadt, Musterstraße 1</h4>
+                <h4>Telefon: 0123456789</h4>
+                <h4>Bestellnummer: 17</h4>
+                <h4>Bestelldatum: 01.01.2021</h4>
+                <h4>Bestellzeit: 12:00</h4>
+                <h4>Bestellstatus: Bestellt</h4>
         <input type="radio" id="abgeholt" name="status" value="abgeholt">Abgeholt<br>
         <input type="radio" id="ausgeliefert" name="status" value="ausgeliefert">Ausgeliefert<br>
         <input type="submit" value="Submit" value="Status">
