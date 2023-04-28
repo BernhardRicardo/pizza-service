@@ -87,6 +87,8 @@ class Fahrer extends Page
         <h2>Bestellung No.17</h2>
         <section>
             <form action="https://echo.fbi.h-da.de/" method="post" accept>
+                <h1>Bestellung No.17</h1>
+                <h2>Bestellung No.17</h2>
         <input type="radio" id="abgeholt" name="status" value="abgeholt">Abgeholt<br>
         <input type="radio" id="ausgeliefert" name="status" value="ausgeliefert">Ausgeliefert<br>
         <input type="submit" value="Submit" value="Status">
