@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 // UTF-8 marker äöüÄÖÜß€
 /**
  * Class Baecker for the exercises of the EWA lecture
@@ -59,15 +61,26 @@ class Baecker extends Page
     /**
      * Fetch all data that is necessary for later output.
      * Data is returned in an array e.g. as associative array.
-	 * @return array An array containing the requested data. 
-	 * This may be a normal array, an empty array or an associative array.
+     * @return array An array containing the requested data. 
+     * This may be a normal array, an empty array or an associative array.
      */
-    protected function getViewData():array
+    protected function getViewData(): array
     {
-        $status = array();
-        return $status;
         // to do: fetch data for this view from the database
-		// to do: return array containing data
+        // to do: return array containing data
+        $pizza = array();
+        $query = "SELECT * FROM `ordered_article` WHERE 1";
+        $recordset = $this->_database->query($query);
+        if (!$recordset) {
+            throw new Exception("Abfrage fehlgeschlagen: " . $this->_database->error);
+        }
+        $record = $recordset->fetch_assoc();
+        while ($record) {
+            $pizza[] = $record;
+            $record = $recordset->fetch_assoc();
+        }
+        $recordset->free();
+        return $pizza;
     }
 
     /**
@@ -76,24 +89,46 @@ class Baecker extends Page
      * of the page ("view") is inserted and -if available- the content of
      * all views contained is generated.
      * Finally, the footer is added.
-	 * @return void
+     * @return void
      */
-    protected function generateView():void
+    protected function generateView(): void
     {
-		$data = $this->getViewData();
-        $this->generatePageHeader('Baecker Seite'); //to do: set optional parameters
-        echo <<<HTML
-        <h1>Baecker</h1>
-        <section>
-        <form action="https://echo.fbi.h-da.de/" method="post" accept>
-        <h2>Bestellung No.17</h2>
-        <input type="radio" id="zubereitung" name="status" value="zubereiten">Zubereiten<br>
-        <input type="radio" id="imOfen" name="status" value="imOfen">im Ofen<br>
-        <input type="radio" id="abholbereits" name="status" value="abholbereits">abholbereits<br>
-        <input type="submit" value="Submit" value="Status">
-        </form>
-        </section>
-        HTML;
+        $data = $this->getViewData();
+        $this->generatePageHeader('Baecker Seite'); //to do: set optional parameter
+
+        $current_ordering_id = NULL;
+        for ($i = 0; $i < count($data); $i++) {
+            $ordering_id = $data[$i]['ordering_id'];
+            $article_id = $data[$i]['article_id'];
+            $ordered_article_id = $data[$i]['ordered_article_id'];
+            $query = "SELECT * FROM `article` WHERE `article_id` = $article_id";
+            $recordset = $this->_database->query($query);
+            if ($ordering_id !== $current_ordering_id) {
+                echo <<<HTML
+                <h2>Bestellung $ordering_id</h2>
+                HTML;
+                $current_ordering_id = $ordering_id;
+            }
+            if (!$recordset) {
+                throw new Exception("Abfrage fehlgeschlagen: " . $this->_database->error);
+            }
+            $record = $recordset->fetch_assoc();
+            $name = $record['name'];
+            $recordset->free();
+            echo <<<HTML
+            <section>
+            <form action="baecker.php" method="post" accept>
+                <p>Pizza: $name</p>
+                <input type="radio" id="zubereitung" name="status" value="1">Zubereiten<br>
+                <input type="radio" id="imOfen" name="status" value="2">im Ofen<br>
+                <input type="radio" id="abholbereits" name="status" value="3">abholbereits<br>
+                <input type="hidden" name="ordering_id" value="$ordering_id">
+                <input type="hidden" name="ordered_article_id" value="$ordered_article_id">
+                <input type="submit" value="Submit" value="Status">
+            </form>
+            </section>
+            HTML;
+        }
         // to do: output view of this page
         $this->generatePageFooter();
     }
@@ -102,12 +137,24 @@ class Baecker extends Page
      * Processes the data that comes via GET or POST.
      * If this page is supposed to do something with submitted
      * data do it here.
-	 * @return void
+     * @return void
      */
-    protected function processReceivedData():void
+    protected function processReceivedData(): void
     {
         parent::processReceivedData();
         // to do: call processReceivedData() for all members
+        //set new status to the pizza
+        if (isset($_POST['status']) && isset($_POST['ordering_id']) && isset($_POST['ordered_article_id'])) {
+            $status = $_POST['status'];
+            $ordering_id = $_POST['ordering_id'];
+            $ordered_article_id = $_POST['ordered_article_id'];
+            $query = "UPDATE `ordered_article` SET `status` = '$status' WHERE `ordered_article`.`ordering_id` = '$ordering_id' AND 
+            `ordered_article`.`ordered_article_id` = '$ordered_article_id'";
+            $recordset = $this->_database->query($query);
+            if (!$recordset) {
+                throw new Exception("Abfrage fehlgeschlagen: " . $this->_database->error);
+            }
+        }
     }
 
     /**
@@ -119,9 +166,9 @@ class Baecker extends Page
      * indicate that function as the central starting point.
      * To make it simpler this is a static function. That is you can simply
      * call it without first creating an instance of the class.
-	 * @return void
+     * @return void
      */
-    public static function main():void
+    public static function main(): void
     {
         try {
             $page = new Baecker();
