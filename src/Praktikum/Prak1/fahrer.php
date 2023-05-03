@@ -129,6 +129,7 @@ class Fahrer extends Page
 
             if ($ordering_id !== $current_ordering_id) {
                 echo <<<HTML
+                <meta http-equiv="refresh" content="10">
                 <form action="fahrer.php" method="post" accept>
                 <input type="radio" id="abhogeholt" name="status" value="4">Abgeholt<br>
                 <input type="radio" id="in Zustellung" name="status" value="5">in Zustellung<br>

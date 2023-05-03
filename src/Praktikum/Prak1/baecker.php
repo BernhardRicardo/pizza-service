@@ -118,6 +118,7 @@ class Baecker extends Page
             echo <<<HTML
             <section>
             <form action="baecker.php" method="post" accept>
+            <meta http-equiv="refresh" content="10">
                 <p>Pizza: $name</p>
                 <input type="radio" id="zubereitung" name="status" value="1">Zubereiten<br>
                 <input type="radio" id="imOfen" name="status" value="2">im Ofen<br>
