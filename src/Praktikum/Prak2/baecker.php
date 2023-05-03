@@ -64,8 +64,20 @@ class Baecker extends Page
      */
     protected function getViewData():array
     {
-        $status = array();
-        return $status;
+        $pizza = array();
+        $query = "SELECT * FROM `ordered_article`
+                    JOIN article ON ordered_article.article_id = article.article_id";
+        $recordset = $this->_database->query($query);
+        if (!$recordset) {
+            throw new Exception("Abfrage fehlgeschlagen: " . $this->_database->error);
+        }
+        $record = $recordset->fetch_assoc();
+        while ($record) {
+            $pizza[] = $record;
+            $record = $recordset->fetch_assoc();
+        }
+        $recordset->free();
+        return $pizza;
         // to do: fetch data for this view from the database
 		// to do: return array containing data
     }
@@ -81,19 +93,50 @@ class Baecker extends Page
     protected function generateView():void
     {
 		$data = $this->getViewData();
+        var_dump($data);
         $this->generatePageHeader('Baecker Seite'); //to do: set optional parameters
-        echo <<<HTML
-        <h1>Baecker</h1>
-        <section>
-            <form action="https://echo.fbi.h-da.de/" method="post" accept>
-                <h2>Bestellung No.17</h2>
-                <input type="radio" id="zubereitung" name="status" value="zubereiten">Zubereiten<br>
-                <input type="radio" id="imOfen" name="status" value="imOfen">im Ofen<br>
-                <input type="radio" id="abholbereits" name="status" value="abholbereits">abholbereits<br>
-                <input type="submit" value="Submit" value="Status">
-            </form>
-        </section>
-        HTML;
+
+        $current_ordering_id = NULL;
+        for($i = 0; $i < count($data); $i++){
+            if($current_ordering_id != $data[$i]['ordering_id']){
+                $current_ordering_id = $data[$i]['ordering_id'];
+                if($i != 0){
+                    echo <<< HTML
+                    </table>
+                    HTML;
+                }
+
+                echo <<< HTML
+                <h2>Bestellung: {$data[$i]['ordering_id']}</h2>
+                <table>
+                    <tr>
+                        <th></th>
+                        <th>bestellt</th>
+                        <th>im Offen</th>   
+                        <th>fertig</th>
+                        <th></th>
+                    </tr>
+                HTML;
+            }
+            $status = $data[$i]['status'];
+            $isBestellt = ($status == 0) ? 'checked' : '';
+            $isImOffen = ($status == 1) ? 'checked' : '';
+            $isFertig = ($status == 2) ? 'checked' : '';
+            echo <<< HTML
+            <tr>
+                <form action="baecker.php" method="post">
+                    <meta http-equiv="Refresh" content="10; URL=baecker.php">
+                    <td>{$data[$i]['name']}</td>
+                    <td><input type="radio" name="order_status_{$data[$i]['ordered_article_id']}" value="bestellt" {$isBestellt}></td>
+                    <td><input type="radio" name="order_status_{$data[$i]['ordered_article_id']}" value="im_offen" {$isImOffen}></td>
+                    <td><input type="radio" name="order_status_{$data[$i]['ordered_article_id']}" value="fertig" {$isFertig}></td>
+                    <input type="hidden" name="ordering_id" value="{$data[$i]['ordering_id']}">
+                    <input type="hidden" name="ordered_article_id" value="{$data[$i]['ordered_article_id']}">
+                    <td><input type="submit" name="submit" value="Update"></td> 
+                </form>
+            </tr>
+            HTML;
+        }
         // to do: output view of this page
         $this->generatePageFooter();
     }
@@ -108,6 +151,20 @@ class Baecker extends Page
     {
         parent::processReceivedData();
         // to do: call processReceivedData() for all members
+        // set new status
+        if(isset($_POST['submit'])&&isset($_POST['ordering_id'])&&isset($_POST['ordered_article_id'])&&isset($_POST['order_status_'.$_POST['ordered_article_id']])){
+            $ordering_id = $_POST['ordering_id'];
+            $ordered_article_id = $_POST['ordered_article_id'];
+            $status = $_POST['order_status_'.$ordered_article_id];
+            $status = ($status == 'bestellt') ? 0 : (($status == 'im_offen') ? 1 : 2);
+            $query = "UPDATE `ordered_article` SET `status` = $status WHERE `ordered_article`.`ordered_article_id` = $ordered_article_id";
+            $recordset = $this->_database->query($query);
+            if (!$recordset) {
+                throw new Exception("Abfrage fehlgeschlagen: " . $this->_database->error);
+            }
+            header("Location: baecker.php", true, 303);
+            die();
+        }
     }
 
     /**
