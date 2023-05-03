@@ -1,21 +1,21 @@
 <?php declare(strict_types=1);
 // UTF-8 marker äöüÄÖÜß€
 /**
- * Class Baecker for the exercises of the EWA lecture
+ * Class PageTemplate for the exercises of the EWA lecture
  * Demonstrates use of PHP including class and OO.
  * Implements Zend coding standards.
  * Generate documentation with Doxygen or phpdoc
  *
  * PHP Version 7.4
  *
- * @file     Baecker.php
+ * @file     PageTemplate.php
  * @package  Page Templates
  * @author   Bernhard Kreling, <bernhard.kreling@h-da.de>
  * @author   Ralf Hahn, <ralf.hahn@h-da.de>
  * @version  3.1
  */
 
-// to do: change name 'Baecker' throughout this file
+// to do: change name 'PageTemplate' throughout this file
 require_once './Page.php';
 
 /**
@@ -29,7 +29,7 @@ require_once './Page.php';
  * @author   Bernhard Kreling, <bernhard.kreling@h-da.de>
  * @author   Ralf Hahn, <ralf.hahn@h-da.de>
  */
-class Baecker extends Page
+class PageTemplate extends Page
 {
     // to do: declare reference variables for members 
     // representing substructures/blocks
@@ -64,8 +64,6 @@ class Baecker extends Page
      */
     protected function getViewData():array
     {
-        $status = array();
-        return $status;
         // to do: fetch data for this view from the database
 		// to do: return array containing data
     }
@@ -81,19 +79,7 @@ class Baecker extends Page
     protected function generateView():void
     {
 		$data = $this->getViewData();
-        $this->generatePageHeader('Baecker Seite'); //to do: set optional parameters
-        echo <<<HTML
-        <h1>Baecker</h1>
-        <section>
-            <form action="https://echo.fbi.h-da.de/" method="post" accept>
-                <h2>Bestellung No.17</h2>
-                <input type="radio" id="zubereitung" name="status" value="zubereiten">Zubereiten<br>
-                <input type="radio" id="imOfen" name="status" value="imOfen">im Ofen<br>
-                <input type="radio" id="abholbereits" name="status" value="abholbereits">abholbereits<br>
-                <input type="submit" value="Submit" value="Status">
-            </form>
-        </section>
-        HTML;
+        $this->generatePageHeader('to do: change headline'); //to do: set optional parameters
         // to do: output view of this page
         $this->generatePageFooter();
     }
@@ -124,7 +110,7 @@ class Baecker extends Page
     public static function main():void
     {
         try {
-            $page = new Baecker();
+            $page = new PageTemplate();
             $page->processReceivedData();
             $page->generateView();
         } catch (Exception $e) {
@@ -137,7 +123,7 @@ class Baecker extends Page
 
 // This call is starting the creation of the page. 
 // That is input is processed and output is created.
-Baecker::main();
+PageTemplate::main();
 
 // Zend standard does not like closing php-tag!
 // PHP doesn't require the closing tag (it is assumed when the file ends). 

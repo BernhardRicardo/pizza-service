@@ -98,6 +98,8 @@ abstract class Page
             <head>
                 <meta charset="UTF-8">
                 <title>$title</title>
+            </head>
+            <body>
         HTML;
         // to do: handle all parameters
         // to do: output common beginning of HTML code
@@ -109,6 +111,10 @@ abstract class Page
      */
     protected function generatePageFooter():void
     {
+        echo <<<HTML
+            </body>
+        </html>
+        HTML;
         // to do: output common end of HTML code
     }
 
