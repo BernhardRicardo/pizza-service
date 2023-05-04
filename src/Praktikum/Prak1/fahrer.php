@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 // UTF-8 marker äöüÄÖÜß€
 /**
  * Class Fahrer for the exercises of the EWA lecture
@@ -61,26 +59,15 @@ class Fahrer extends Page
     /**
      * Fetch all data that is necessary for later output.
      * Data is returned in an array e.g. as associative array.
-     * @return array An array containing the requested data. 
-     * This may be a normal array, an empty array or an associative array.
+	 * @return array An array containing the requested data. 
+	 * This may be a normal array, an empty array or an associative array.
      */
-    protected function getViewData(): array
+    protected function getViewData():array
     {
+        $status = array();
+        return $status;
         // to do: fetch data for this view from the database
-        // to do: return array containing data
-        $pizza = array();
-        $query = "SELECT * FROM `ordered_article` WHERE 1";
-        $recordset = $this->_database->query($query);
-        if (!$recordset) {
-            throw new Exception("Abfrage fehlgeschlagen: " . $this->_database->error);
-        }
-        $record = $recordset->fetch_assoc();
-        while ($record) {
-            $pizza[] = $record;
-            $record = $recordset->fetch_assoc();
-        }
-        $recordset->free();
-        return $pizza;
+		// to do: return array containing data
     }
 
     /**
@@ -89,59 +76,30 @@ class Fahrer extends Page
      * of the page ("view") is inserted and -if available- the content of
      * all views contained is generated.
      * Finally, the footer is added.
-     * @return void
+	 * @return void
      */
-    protected function generateView(): void
+    protected function generateView():void
     {
-        $data = $this->getViewData();
+		$data = $this->getViewData();
         $this->generatePageHeader('Fahrer Seite'); //to do: set optional parameters
-
-        //take order data from database
-        $current_ordering_id = NULL;
-        for ($i = 0; $i < count($data); $i++) {
-            $ordering_id = $data[$i]['ordering_id'];
-            $article_id = $data[$i]['article_id'];
-            $query = "SELECT * FROM `article` WHERE `article_id` = $article_id";
-            $recordset = $this->_database->query($query);
-
-            if ($ordering_id !== $current_ordering_id) {
-                //Take customer address from database
-                $query2 = "SELECT * FROM `ordering` WHERE `ordering_id` = $ordering_id";
-                $recordset2 = $this->_database->query($query2);
-                $record2 = $recordset2->fetch_assoc();
-                $address = $record2['address'];
-                echo <<<HTML
-                <h2>Bestellung $ordering_id</h2>
-                <h2>Adress: $address</h2>
-                HTML;
-            }
-            if (!$recordset) {
-                throw new Exception("Abfrage fehlgeschlagen: " . $this->_database->error);
-            }
-            $record = $recordset->fetch_assoc();
-            $name = $record['name'];
-            $recordset->free();
-            echo <<<HTML
-            <section>
-            <p>$name</p>
-            </section>
-            HTML;
-
-            if ($ordering_id !== $current_ordering_id) {
-                echo <<<HTML
-                <meta http-equiv="refresh" content="10">
-                <form action="fahrer.php" method="post" accept>
-                <input type="radio" id="abhogeholt" name="status" value="4">Abgeholt<br>
-                <input type="radio" id="in Zustellung" name="status" value="5">in Zustellung<br>
-                <input type="radio" id="zugeliefert" name="status" value="6">Zugeliefert<br>
-                <input type="hidden" name="ordering_id" value="$ordering_id">
-                <input type="submit" value="Submit" value="Status">
-                </form>
-        HTML;
-            }
-
-            $current_ordering_id = $ordering_id;
-        }
+        echo <<<HTML
+        <h1>Fahrer</h1>
+        <section>
+            <form action="https://echo.fbi.h-da.de/" method="post" accept>
+                <h1>Bestellung No. 17</h1>
+                <h4>Name: Bernhard Ricardo Kreling</h4>
+                <h4>Adresse: 12345 Musterstadt, Musterstraße 1</h4>
+                <h4>Telefon: 0123456789</h4>
+                <h4>Bestellnummer: 17</h4>
+                <h4>Bestelldatum: 01.01.2021</h4>
+                <h4>Bestellzeit: 12:00</h4>
+                <h4>Bestellstatus: Bestellt</h4>
+        <input type="radio" id="abgeholt" name="status" value="abgeholt">Abgeholt<br>
+        <input type="radio" id="ausgeliefert" name="status" value="ausgeliefert">Ausgeliefert<br>
+        <input type="submit" value="Submit" value="Status">
+            </form>
+        </section>
+HTML;
         // to do: output view of this page
         $this->generatePageFooter();
     }
@@ -150,22 +108,12 @@ class Fahrer extends Page
      * Processes the data that comes via GET or POST.
      * If this page is supposed to do something with submitted
      * data do it here.
-     * @return void
+	 * @return void
      */
-    protected function processReceivedData(): void
+    protected function processReceivedData():void
     {
         parent::processReceivedData();
         // to do: call processReceivedData() for all members
-
-        if (isset($_POST['status']) && isset($_POST['ordering_id'])) {
-            $status = $_POST['status'];
-            $ordering_id = $_POST['ordering_id'];
-            $query = "UPDATE `ordered_article` SET `status` = '$status' WHERE `ordered_article`.`ordering_id` = '$ordering_id'";
-            $recordset = $this->_database->query($query);
-            if (!$recordset) {
-                throw new Exception("Abfrage fehlgeschlagen: " . $this->_database->error);
-            }
-        }
     }
 
     /**
@@ -177,9 +125,9 @@ class Fahrer extends Page
      * indicate that function as the central starting point.
      * To make it simpler this is a static function. That is you can simply
      * call it without first creating an instance of the class.
-     * @return void
+	 * @return void
      */
-    public static function main(): void
+    public static function main():void
     {
         try {
             $page = new Fahrer();
