@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 // UTF-8 marker äöüÄÖÜß€
 /**
  * Class PageTemplate for the exercises of the EWA lecture
@@ -59,15 +61,27 @@ class Bestellung extends Page
     /**
      * Fetch all data that is necessary for later output.
      * Data is returned in an array e.g. as associative array.
-	 * @return array An array containing the requested data. 
-	 * This may be a normal array, an empty array or an associative array.
+     * @return array An array containing the requested data. 
+     * This may be a normal array, an empty array or an associative array.
      */
-    protected function getViewData():array
+    protected function getViewData(): array
     {
-        $pizza = array();
-        return $pizza;
         // to do: fetch data for this view from the database
-		// to do: return array containing data
+        // to do: return array containing data
+        $article_list = array();
+        $sql = "SELECT a.article_id, a.name, a.price FROM article a";
+        $recordset = $this->_database->query($sql);
+        if (!$recordset) throw new Exception("Fehler in Abfrage: " . $this->_database->error);
+
+        // read selected records into result array
+        while ($record = $recordset->fetch_assoc()) {
+            $article_id = $record["article_id"];
+            $pizza_name = $record["name"];
+            $price = $record["price"];
+            array_push($article_list, array($article_id, $pizza_name, $price));
+        }
+        $recordset->free();
+        return $article_list;
     }
 
     /**
@@ -76,55 +90,44 @@ class Bestellung extends Page
      * of the page ("view") is inserted and -if available- the content of
      * all views contained is generated.
      * Finally, the footer is added.
-	 * @return void
+     * @return void
      */
-    protected function generateView():void
+    protected function generateView(): void
     {
-		$data = $this->getViewData();
+        $data = $this->getViewData();
         $this->generatePageHeader('Pizza Service'); //to do: set optional parameters
+
+        for ($i = 0; $i < count($data); $i++) {
+            $article_id = $data[$i][0];
+            $pizza_name = $data[$i][1];
+            $price = $data[$i][2];
+            echo <<< HTML
+            <section>
+            <img
+                width="100"
+                height="100"
+                src="../images/41J3qSlgJiL.jpg"
+                alt=$pizza_name
+            />
+            <h2>$pizza_name</h2>
+            <h3>$price</h3>
+            </section>\n
+            HTML;
+        }
         echo <<< HTML
-        <section>
-            <h1>SpeiseKarte</h1>
-            <img
-                width="100"
-                height="100"
-                src="../images/41J3qSlgJiL.jpg"
-                alt="Pizza Margharita"
-            />
-            <h2>Margharita</h2>
-            <h3>$ 4.00</h3>
-            <img
-                width="100"
-                height="100"
-                src="../images/41J3qSlgJiL.jpg"
-                alt="Pizza Salami"
-            />
-            <h2>Salami</h2>
-            <h3>$ 4.50</h3>
-            <img
-                width="100"
-                height="100"
-                src="../images/41J3qSlgJiL.jpg"
-                alt="Pizza Hawai"
-            />
-            <h2>Hawai</h2>
-            <h3>$ 5.50</h3>
-        </section>
-       
-        <section>
-            <form action="https://echo.fbi.h-da.de/" method="post" accept>
-                <h1>Warenkorb</h1>
-                    <select name="pizza[]" multiple>
-                    <option value="Salami" id="pizza1">Salami</option>
-                    <option value="Margahrita" id="pizza2">Margharita</option>
-                    <option value="Hawai">Hawai</option>
-                </select>
-                <input name="Name" type="text" value="" placeholder="Ihr Name" />
-                <input name="Adresse" type="text" value="" placeholder="ihre Adresse" >
-                <button tabindex="1" accesskey="l">Alle Loeschen</button>
-                <button tabindex="2" accesskey="a">Auswahl Loeschen</button>
-                <input  tabindex="3" type="submit" accesskey="b" value="Bestellen" >
-            </form>
+      
+        <form action="bestellung.php" method="post" accept>
+            <h1>Warenkorb</h1>
+            <select name="pizza[]" multiple>
+            <option value="1" id="pizza1">Salami</option>
+            <option value="2" id="pizza2">Vegetaria</option>
+            <option value="3" id="pizza3">Spinat Huenchen</option>
+            </select>
+            <input name="Adresse" type="text" value="" placeholder="ihre Adresse" >
+            <button tabindex="1" accesskey="l">Alle Loeschen</button>
+            <button tabindex="2" accesskey="a">Auswahl Loeschen</button>
+            <input  tabindex="3" type="submit" accesskey="b" value="Bestellen" >
+        </form>
         </section>
         HTML;
         // to do: output view of this page
@@ -135,12 +138,35 @@ class Bestellung extends Page
      * Processes the data that comes via GET or POST.
      * If this page is supposed to do something with submitted
      * data do it here.
-	 * @return void
+     * @return void
      */
-    protected function processReceivedData():void
+    protected function processReceivedData(): void
     {
         parent::processReceivedData();
         // to do: call processReceivedData() for all members
+        //make new user
+        if (isset($_POST["pizza"]) && isset($_POST["Adresse"])) {
+            $ordering_id = $this->_database->insert_id;
+            $address = $_POST["Adresse"];
+            $sql = "INSERT INTO ordering (ordering_id ,address) VALUES ('$ordering_id' , '$address')";
+            $recordset = $this->_database->query($sql);
+            if (!$recordset) throw new Exception("Fehler in Abfrage: " . $this->_database->error);
+            //make new order
+            $sql = "SELECT ordering_id FROM ordering ORDER BY ordering_time DESC LIMIT 1";
+            $recordset = $this->_database->query($sql);
+            // read selected records into result array
+            while ($record = $recordset->fetch_assoc()) {
+                $ordering_id = $record["ordering_id"];
+            }
+            $recordset->free();
+            //insert pizza
+            $pizzas = $_POST["pizza"];
+            for ($i = 0; $i < count($pizzas); $i++) {
+                $sql = "INSERT INTO `ordered_article`(`ordered_article_id`, `ordering_id`, `article_id`, `status`) VALUES ('0','$ordering_id','$pizzas[$i]','0')";
+                $recordset = $this->_database->query($sql);
+                if (!$recordset) throw new Exception("Fehler in Abfrage: " . $this->_database->error);
+            }
+        }
     }
 
     /**
@@ -152,9 +178,9 @@ class Bestellung extends Page
      * indicate that function as the central starting point.
      * To make it simpler this is a static function. That is you can simply
      * call it without first creating an instance of the class.
-	 * @return void
+     * @return void
      */
-    public static function main():void
+    public static function main(): void
     {
         try {
             $page = new Bestellung();
