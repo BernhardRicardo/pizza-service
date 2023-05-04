@@ -93,7 +93,6 @@ class Baecker extends Page
     protected function generateView():void
     {
 		$data = $this->getViewData();
-        var_dump($data);
         $this->generatePageHeader('Baecker Seite'); //to do: set optional parameters
 
         $current_ordering_id = NULL;

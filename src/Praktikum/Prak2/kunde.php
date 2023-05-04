@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 // UTF-8 marker äöüÄÖÜß€
 /**
  * Class Kunde for the exercises of the EWA lecture
@@ -59,15 +61,26 @@ class Kunde extends Page
     /**
      * Fetch all data that is necessary for later output.
      * Data is returned in an array e.g. as associative array.
-	 * @return array An array containing the requested data. 
-	 * This may be a normal array, an empty array or an associative array.
+     * @return array An array containing the requested data. 
+     * This may be a normal array, an empty array or an associative array.
      */
-    protected function getViewData():array
+    protected function getViewData(): array
     {
-        $pizza = array();
-        return $pizza;
         // to do: fetch data for this view from the database
-		// to do: return array containing data
+        // to do: return array containing data
+        $pizza = array();
+        $query = "SELECT * FROM `ordered_article` WHERE 1";
+        $recordset = $this->_database->query($query);
+        if (!$recordset) {
+            throw new Exception("Abfrage fehlgeschlagen: " . $this->_database->error);
+        }
+        $record = $recordset->fetch_assoc();
+        while ($record) {
+            $pizza[] = $record;
+            $record = $recordset->fetch_assoc();
+        }
+        $recordset->free();
+        return $pizza;
     }
 
     /**
@@ -76,29 +89,48 @@ class Kunde extends Page
      * of the page ("view") is inserted and -if available- the content of
      * all views contained is generated.
      * Finally, the footer is added.
-	 * @return void
+     * @return void
      */
-    protected function generateView():void
+    protected function generateView(): void
     {
-		$data = $this->getViewData();
+        $data = $this->getViewData();
         $this->generatePageHeader('Kunde Bestellungsinformation'); //to do: set optional parameters
-        echo <<<HTML
-        <h1>Kunde</h1>
-        <h2>Bestellung No.17</h2>
-        <h4>Name: Bernhard Ricardo Kreling</h4>
-        <h4>Adresse: 12345 Musterstadt, Musterstraße 1</h4>
-        <h4>Telefon: 0123456789</h4>
-        <h4>Bestellnummer: 17</h4>
-        <h4>Bestelldatum: 01.01.2021</h4>
-        <h4>Bestellzeit: 12:00</h4>
-        <h4>Bestellstatus: Bestellt</h4>
-        <h4>Bestellung:</h4>
-        <ol>
-            <li>Pizza Margherita</li>
-            <li>Pizza Salami</li>
-            <li>Pizza Hawaii</li>
-        </ol>
-        HTML;
+        $current_ordering_id = NULL;
+        for ($i = 0; $i < count($data); $i++) {
+            $ordering_id = $data[$i]['ordering_id'];
+            $article_id = $data[$i]['article_id'];
+            $query = "SELECT * FROM `article` WHERE `article_id` = $article_id";
+            $recordset = $this->_database->query($query);
+
+            if ($ordering_id !== $current_ordering_id) {
+                //Take customer address from database
+                $query2 = "SELECT * FROM `ordering` WHERE `ordering_id` = $ordering_id";
+                $recordset2 = $this->_database->query($query2);
+                $record2 = $recordset2->fetch_assoc();
+                $address = $record2['address'];
+                $ordering_id = $record2['ordering_id'];
+                $order_zeit = $record2['ordering_time'];
+                echo <<<HTML
+                <h2>Bestellung $ordering_id</h2>
+                <h3>Adresse: $address</h3>
+                <h3>Bestellzeit: $order_zeit</h3>
+                HTML;
+                $current_ordering_id = $ordering_id;
+            }
+            if (!$recordset) {
+                throw new Exception("Abfrage fehlgeschlagen: " . $this->_database->error);
+            }
+            $record = $recordset->fetch_assoc();
+            $name = $record['name'];
+            $recordset->free();
+            echo <<<HTML
+            <section>
+            <form action="baecker.php" method="post" accept>
+                <p>Pizza: $name</p>
+            </form>
+            </section>
+            HTML;
+        }
         // to do: output view of this page
         $this->generatePageFooter();
     }
@@ -107,9 +139,9 @@ class Kunde extends Page
      * Processes the data that comes via GET or POST.
      * If this page is supposed to do something with submitted
      * data do it here.
-	 * @return void
+     * @return void
      */
-    protected function processReceivedData():void
+    protected function processReceivedData(): void
     {
         parent::processReceivedData();
         // to do: call processReceivedData() for all members
@@ -124,9 +156,9 @@ class Kunde extends Page
      * indicate that function as the central starting point.
      * To make it simpler this is a static function. That is you can simply
      * call it without first creating an instance of the class.
-	 * @return void
+     * @return void
      */
-    public static function main():void
+    public static function main(): void
     {
         try {
             $page = new Kunde();
