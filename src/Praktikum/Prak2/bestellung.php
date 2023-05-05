@@ -110,7 +110,7 @@ class Bestellung extends Page
                 alt=$pizza_name
             />
             <h2>$pizza_name</h2>
-            <h3>$price</h3>
+            <h3>$ $price</h3>
             </section>\n
             HTML;
         }
