@@ -130,11 +130,11 @@ class Fahrer extends Page
             if ($ordering_id !== $current_ordering_id) {
                 echo <<<HTML
                 <form action="fahrer.php" method="post" >
-                <input type="radio" id="abhogeholt" name="status" value="4">Abgeholt<br>
-                <input type="radio" id="in Zustellung" name="status" value="5">in Zustellung<br>
-                <input type="radio" id="zugeliefert" name="status" value="6">Zugeliefert<br>
-                <input type="hidden" name="ordering_id" value="$ordering_id">
-                <input type="submit" value="Submit" value="Status">
+                <input CHECKED type="radio" id="abhogeholt$ordering_id" name="status" value="4">Abgeholt<br>
+                <input type="radio" id="inZustellung$ordering_id" name="status" value="5">in Zustellung<br>
+                <input type="radio" id="zugeliefert$ordering_id" name="status" value="6">Zugeliefert<br>
+                <input type="hidden" name="ordering_id$ordering_id" value="$ordering_id">
+                <input type="submit" id="submit$ordering_id" value="Submit" name="Status">
                 </form>
         HTML;
             }
