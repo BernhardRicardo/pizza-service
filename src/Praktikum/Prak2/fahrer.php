@@ -156,16 +156,6 @@ class Fahrer extends Page
     {
         parent::processReceivedData();
         // to do: call processReceivedData() for all members
-
-        if (isset($_POST['status']) && isset($_POST['ordering_id'])) {
-            $status = $_POST['status'];
-            $ordering_id = $_POST['ordering_id'];
-            $query = "UPDATE `ordered_article` SET `status` = '$status' WHERE `ordered_article`.`ordering_id` = '$ordering_id'";
-            $recordset = $this->_database->query($query);
-            if (!$recordset) {
-                throw new Exception("Abfrage fehlgeschlagen: " . $this->_database->error);
-            }
-        }
     }
 
     /**
