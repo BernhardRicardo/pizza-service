@@ -61,8 +61,8 @@ class Fahrer extends Page
     /**
      * Fetch all data that is necessary for later output.
      * Data is returned in an array e.g. as associative array.
-     * @return array An array containing the requested data. 
-     * This may be a normal array, an empty array or an associative array.
+	 * @return array An array containing the requested data. 
+	 * This may be a normal array, an empty array or an associative array.
      */
     protected function getViewData(): array
     {
@@ -89,11 +89,11 @@ class Fahrer extends Page
      * of the page ("view") is inserted and -if available- the content of
      * all views contained is generated.
      * Finally, the footer is added.
-     * @return void
+	 * @return void
      */
     protected function generateView(): void
     {
-        $data = $this->getViewData();
+		$data = $this->getViewData();
         $this->generatePageHeader('Fahrer Seite'); //to do: set optional parameters
 
         //take order data from database
@@ -122,7 +122,7 @@ class Fahrer extends Page
             $name = $record['name'];
             $recordset->free();
             echo <<<HTML
-            <section>
+        <section>
             <p>$name</p>
             </section>
             HTML;
@@ -137,7 +137,7 @@ class Fahrer extends Page
                 <input type="hidden" name="ordering_id" value="$ordering_id">
                 <input type="submit" value="Submit" value="Status">
                 </form>
-        HTML;
+HTML;
             }
 
             $current_ordering_id = $ordering_id;
@@ -156,6 +156,16 @@ class Fahrer extends Page
     {
         parent::processReceivedData();
         // to do: call processReceivedData() for all members
+
+        if (isset($_POST['status']) && isset($_POST['ordering_id'])) {
+            $status = $_POST['status'];
+            $ordering_id = $_POST['ordering_id'];
+            $query = "UPDATE `ordered_article` SET `status` = '$status' WHERE `ordered_article`.`ordering_id` = '$ordering_id'";
+            $recordset = $this->_database->query($query);
+            if (!$recordset) {
+                throw new Exception("Abfrage fehlgeschlagen: " . $this->_database->error);
+            }
+        }
     }
 
     /**
@@ -167,7 +177,7 @@ class Fahrer extends Page
      * indicate that function as the central starting point.
      * To make it simpler this is a static function. That is you can simply
      * call it without first creating an instance of the class.
-     * @return void
+	 * @return void
      */
     public static function main(): void
     {
