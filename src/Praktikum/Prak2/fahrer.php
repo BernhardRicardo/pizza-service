@@ -119,6 +119,7 @@ class Fahrer extends Page
                 <input type="radio" id="zugeliefert$ordering_id" name="status" value="6">Zugeliefert<br>
                 <input type="hidden" name="ordering_id$ordering_id" value="$ordering_id">
                 <input type="submit" id="submit$ordering_id" value="Submit" name="Status">
+                </form>
                 HTML;
             }
             if (!$recordset) {
