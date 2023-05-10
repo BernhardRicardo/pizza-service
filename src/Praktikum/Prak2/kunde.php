@@ -125,7 +125,7 @@ class Kunde extends Page
             $recordset->free();
             echo <<<HTML
             <section>
-            <form action="baecker.php" method="post" accept>
+            <form action="baecker.php" method="post" >
                 <p>Pizza: $name</p>
             </form>
             </section>
