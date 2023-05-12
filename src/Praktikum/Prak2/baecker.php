@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 // UTF-8 marker äöüÄÖÜß€
 /**
  * Class Baecker for the exercises of the EWA lecture
@@ -59,14 +61,15 @@ class Baecker extends Page
     /**
      * Fetch all data that is necessary for later output.
      * Data is returned in an array e.g. as associative array.
-	 * @return array An array containing the requested data. 
-	 * This may be a normal array, an empty array or an associative array.
+     * @return array An array containing the requested data. 
+     * This may be a normal array, an empty array or an associative array.
      */
-    protected function getViewData():array
+    protected function getViewData(): array
     {
         $pizza = array();
         $query = "SELECT * FROM `ordered_article`
-                    JOIN article ON ordered_article.article_id = article.article_id";
+                    JOIN article ON ordered_article.article_id = article.article_id
+                    ORDER BY `ordered_article`.`ordering_id` ASC";
         $recordset = $this->_database->query($query);
         if (!$recordset) {
             throw new Exception("Abfrage fehlgeschlagen: " . $this->_database->error);
@@ -79,7 +82,7 @@ class Baecker extends Page
         $recordset->free();
         return $pizza;
         // to do: fetch data for this view from the database
-		// to do: return array containing data
+        // to do: return array containing data
     }
 
     /**
@@ -88,16 +91,16 @@ class Baecker extends Page
      * of the page ("view") is inserted and -if available- the content of
      * all views contained is generated.
      * Finally, the footer is added.
-	 * @return void
+     * @return void
      */
-    protected function generateView():void
+    protected function generateView(): void
     {
-		$data = $this->getViewData();
+        $data = $this->getViewData();
         $this->generatePageHeader('Baecker Seite'); //to do: set optional parameters
 
         $current_ordering_id = NULL;
-        for($i = 0; $i < count($data); $i++){
-            if($current_ordering_id != $data[$i]['ordering_id']){
+        for ($i = 0; $i < count($data); $i++) {
+            if ($current_ordering_id != $data[$i]['ordering_id']) {
                 $current_ordering_id = $data[$i]['ordering_id'];
                 echo <<< HTML
                 <h2>Bestellung: {$data[$i]['ordering_id']}</h2>
@@ -131,17 +134,17 @@ HTML;
      * Processes the data that comes via GET or POST.
      * If this page is supposed to do something with submitted
      * data do it here.
-	 * @return void
+     * @return void
      */
-    protected function processReceivedData():void
+    protected function processReceivedData(): void
     {
         parent::processReceivedData();
         // to do: call processReceivedData() for all members
         // set new status
-        if(isset($_POST['submit'])&&isset($_POST['ordering_id'])&&isset($_POST['ordered_article_id'])&&isset($_POST['order_status_'.$_POST['ordered_article_id']])){
+        if (isset($_POST['submit']) && isset($_POST['ordering_id']) && isset($_POST['ordered_article_id']) && isset($_POST['order_status_' . $_POST['ordered_article_id']])) {
             $ordering_id = $_POST['ordering_id'];
             $ordered_article_id = $_POST['ordered_article_id'];
-            $status = $_POST['order_status_'.$ordered_article_id];
+            $status = $_POST['order_status_' . $ordered_article_id];
             $status = ($status == 'bestellt') ? 0 : (($status == 'im_offen') ? 1 : 2);
             $query = "UPDATE `ordered_article` SET `status` = $status WHERE `ordered_article`.`ordered_article_id` = $ordered_article_id";
             $recordset = $this->_database->query($query);
@@ -162,9 +165,9 @@ HTML;
      * indicate that function as the central starting point.
      * To make it simpler this is a static function. That is you can simply
      * call it without first creating an instance of the class.
-	 * @return void
+     * @return void
      */
-    public static function main():void
+    public static function main(): void
     {
         try {
             $page = new Baecker();
