@@ -69,7 +69,9 @@ class Fahrer extends Page
         // to do: fetch data for this view from the database
         // to do: return array containing data
         $pizza = array();
-        $query = "SELECT * FROM `ordered_article` WHERE 1";
+        $query = "SELECT * FROM `ordered_article`
+                INNER JOIN `article` ON `ordered_article`.`article_id` = `article`.`article_id`
+                INNER JOIN `ordering` ON `ordered_article`.`ordering_id` = `ordering`.`ordering_id`";
         $recordset = $this->_database->query($query);
         if (!$recordset) {
             throw new Exception("Abfrage fehlgeschlagen: " . $this->_database->error);
@@ -96,46 +98,48 @@ class Fahrer extends Page
 		$data = $this->getViewData();
         $this->generatePageHeader('Fahrer Seite'); //to do: set optional parameters
 
-        //take order data from database
-        $current_ordering_id = NULL;
-        for ($i = 0; $i < count($data); $i++) {
-            $ordering_id = $data[$i]['ordering_id'];
-            $article_id = $data[$i]['article_id'];
-            $query = "SELECT * FROM `article` WHERE `article_id` = $article_id";
-            $recordset = $this->_database->query($query);
+        $current_order_id = NULL;
+        $pizza = "";
+        $print = false;
+        for($i = 0; $i < count($data); $i++){
 
-            if ($ordering_id !== $current_ordering_id) {
-                //Take customer address from database
-                $query2 = "SELECT * FROM `ordering` WHERE `ordering_id` = $ordering_id";
-                $recordset2 = $this->_database->query($query2);
-                $record2 = $recordset2->fetch_assoc();
-                $address = $record2['address'];
-                echo <<<HTML
-                <h2>Bestellung $ordering_id</h2>
-                <h2>Adress: $address</h2>
-                <form action="fahrer.php" method="post" >
-                <input CHECKED type="radio" id="abhogeholt$ordering_id" name="status" value="4">Abgeholt<br>
-                <input type="radio" id="inZustellung$ordering_id" name="status" value="5">in Zustellung<br>
-                <input type="radio" id="zugeliefert$ordering_id" name="status" value="6">Zugeliefert<br>
-                <input type="hidden" name="ordering_id$ordering_id" value="$ordering_id">
-                <input type="submit" id="submit$ordering_id" value="Submit" name="Status">
-                </form>
-                HTML;
+            if($current_order_id != $data[$i]['ordering_id']){
+                if($current_order_id != NULL && $print){
+                    substr($pizza, 0, -3);
+                    $status = $data[$i-1]['status'];
+                    $isFertig = ($status == 2) ? 'checked' : '';
+                    $isUnterwegs = ($status == 3) ? 'checked' : '';
+                    $isGeliefert = ($status == 4) ? 'checked' : '';
+                    echo <<<HTML
+                    <form action="fahrer.php" method="post">
+                        <meta http-equiv="Refresh" content="10; URL=baecker.php">
+                        <label><b>{$data[$i-1]['address']}</b></label>
+                        <br>
+                        <label><b>$pizza</b></label>
+                        <br>
+                        <input type="hidden" name="ordering_id" value="$current_order_id">
+                        <input type="radio" name="status" value="fertig" {$isFertig}>
+                        <label for="html">fertig</label>
+                        <input type="radio" name="status" value="unterwegs" {$isUnterwegs}>
+                        <label for="html">unterwegs</label>
+                        <input type="radio" name="status" value="geliefert" {$isGeliefert}>                    
+                        <label for="html">geliefert</label>
+                        <input type="submit" name="submit" value="Update">
+                    </form>
+HTML;
+                }
+                $current_order_id = $data[$i]['ordering_id'];
+                $pizza = "";
+                $print = true;
             }
-            if (!$recordset) {
-                throw new Exception("Abfrage fehlgeschlagen: " . $this->_database->error);
+            else if($data[$i]['status'] >= 2 && $print){
+                $pizza .= $data[$i]['name'] . ", ";
+            }else{
+                $print = false;
             }
-            $record = $recordset->fetch_assoc();
-            $name = $record['name'];
-            $recordset->free();
-            echo <<<HTML
-        <section>
-            <p>$name</p>
-            </section>
-            HTML;
-
-            $current_ordering_id = $ordering_id;
         }
+
+        
         // to do: output view of this page
         $this->generatePageFooter();
     }
@@ -151,14 +155,17 @@ class Fahrer extends Page
         parent::processReceivedData();
         // to do: call processReceivedData() for all members
 
-        if (isset($_POST['status']) && isset($_POST['ordering_id'])) {
+        if (isset($_POST['submit']) && isset($_POST['ordering_id']) && isset($_POST['status'])) {
             $status = $_POST['status'];
+            $status = ($status == 'fertig') ? 2 : (($status == 'unterwegs') ? 3 : 4);
             $ordering_id = $_POST['ordering_id'];
             $query = "UPDATE `ordered_article` SET `status` = '$status' WHERE `ordered_article`.`ordering_id` = '$ordering_id'";
             $recordset = $this->_database->query($query);
             if (!$recordset) {
                 throw new Exception("Abfrage fehlgeschlagen: " . $this->_database->error);
             }
+            header("Location: fahrer.php", true, 303);
+            die();
         }
     }
 
