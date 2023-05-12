@@ -99,42 +99,29 @@ class Baecker extends Page
         for($i = 0; $i < count($data); $i++){
             if($current_ordering_id != $data[$i]['ordering_id']){
                 $current_ordering_id = $data[$i]['ordering_id'];
-                if($i != 0){
-                    echo <<< HTML
-                    </table>
-                    HTML;
-                }
-
                 echo <<< HTML
                 <h2>Bestellung: {$data[$i]['ordering_id']}</h2>
-                <table>
-                    <tr>
-                        <th></th>
-                        <th>bestellt</th>
-                        <th>im Offen</th>   
-                        <th>fertig</th>
-                        <th></th>
-                    </tr>
-                HTML;
+HTML;
             }
             $status = $data[$i]['status'];
             $isBestellt = ($status == 0) ? 'checked' : '';
             $isImOffen = ($status == 1) ? 'checked' : '';
             $isFertig = ($status == 2) ? 'checked' : '';
             echo <<< HTML
-            <tr>
-                <form action="baecker.php" method="post">
-                    <meta http-equiv="Refresh" content="10; URL=baecker.php">
-                    <td>{$data[$i]['name']}</td>
-                    <td><input type="radio" name="order_status_{$data[$i]['ordered_article_id']}" value="bestellt" {$isBestellt}></td>
-                    <td><input type="radio" name="order_status_{$data[$i]['ordered_article_id']}" value="im_offen" {$isImOffen}></td>
-                    <td><input type="radio" name="order_status_{$data[$i]['ordered_article_id']}" value="fertig" {$isFertig}></td>
-                    <input type="hidden" name="ordering_id" value="{$data[$i]['ordering_id']}">
-                    <input type="hidden" name="ordered_article_id" value="{$data[$i]['ordered_article_id']}">
-                    <td><input type="submit" name="submit" value="Update"></td> 
-                </form>
-            </tr>
-            HTML;
+            <form action="baecker.php" method="post">
+                <meta http-equiv="Refresh" content="10; URL=baecker.php">
+                <p>{$data[$i]['name']}<p>
+                <input type="radio" name="order_status_{$data[$i]['ordered_article_id']}" value="bestellt" {$isBestellt}>
+                <label for="html">bestellt</label>
+                <input type="radio" name="order_status_{$data[$i]['ordered_article_id']}" value="im_offen" {$isImOffen}>
+                <label for="html">im Offen</label>
+                <input type="radio" name="order_status_{$data[$i]['ordered_article_id']}" value="fertig" {$isFertig}>                    
+                <label for="html">fertig</label>
+                <input type="hidden" name="ordering_id" value="{$data[$i]['ordering_id']}">
+                <input type="hidden" name="ordered_article_id" value="{$data[$i]['ordered_article_id']}">
+                <input type="submit" name="submit" value="Update">
+            </form>
+HTML;
         }
         // to do: output view of this page
         $this->generatePageFooter();
