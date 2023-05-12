@@ -69,7 +69,10 @@ class Kunde extends Page
         // to do: fetch data for this view from the database
         // to do: return array containing data
         $pizza = array();
-        $query = "SELECT * FROM `ordered_article` WHERE 1";
+        $query = "SELECT * FROM `ordered_article`
+        INNER JOIN `article` ON `ordered_article`.`article_id` = `article`.`article_id`
+        INNER JOIN `ordering` ON `ordered_article`.`ordering_id` = `ordering`.`ordering_id`
+        ORDER BY `ordering`.`ordering_id` ASC";
         $recordset = $this->_database->query($query);
         if (!$recordset) {
             throw new Exception("Abfrage fehlgeschlagen: " . $this->_database->error);
@@ -97,39 +100,22 @@ class Kunde extends Page
         $this->generatePageHeader('Kunde Bestellungsinformation'); //to do: set optional parameters
         $current_ordering_id = NULL;
         for ($i = 0; $i < count($data); $i++) {
-            $ordering_id = $data[$i]['ordering_id'];
-            $article_id = $data[$i]['article_id'];
-            $query = "SELECT * FROM `article` WHERE `article_id` = $article_id";
-            $recordset = $this->_database->query($query);
-
-            if ($ordering_id !== $current_ordering_id) {
-                //Take customer address from database
-                $query2 = "SELECT * FROM `ordering` WHERE `ordering_id` = $ordering_id";
-                $recordset2 = $this->_database->query($query2);
-                $record2 = $recordset2->fetch_assoc();
-                $address = $record2['address'];
-                $ordering_id = $record2['ordering_id'];
-                $order_zeit = $record2['ordering_time'];
-        echo <<<HTML
-                <h2>Bestellung $ordering_id</h2>
-                <h3>Adresse: $address</h3>
-                <h3>Bestellzeit: $order_zeit</h3>
+            $ordering_id = $data[$i]['ordering_id']; //16
+            $address = $data[$i]['address']; //Birken
+            $name = $data[$i]['name']; //pizza
+            //print the order
+            if ($current_ordering_id != $ordering_id) {
+                echo <<<HTML
+                <h1>Bestellung: $ordering_id</h1>
+                <h2>Adresse: $address</h2>
                 HTML;
-                $current_ordering_id = $ordering_id;
             }
-            if (!$recordset) {
-                throw new Exception("Abfrage fehlgeschlagen: " . $this->_database->error);
-            }
-            $record = $recordset->fetch_assoc();
-            $name = $record['name'];
-            $recordset->free();
             echo <<<HTML
             <section>
-            <form action="baecker.php" method="post" >
-                <p>Pizza: $name</p>
-            </form>
+            <p>$name</p>
             </section>
-        HTML;
+            HTML;
+            $current_ordering_id = $ordering_id;
         }
         // to do: output view of this page
         $this->generatePageFooter();
