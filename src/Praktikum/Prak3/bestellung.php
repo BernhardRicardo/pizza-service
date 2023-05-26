@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 // UTF-8 marker äöüÄÖÜß€
 /**
@@ -161,6 +160,8 @@ class Bestellung extends Page
             $recordset->free();
             //insert pizza
             $pizzas = $_POST["pizza"];
+             //set ordering id to session
+             $_SESSION["ordering_id"] = $ordering_id;
             for ($i = 0; $i < count($pizzas); $i++) {
                 $sql = "INSERT INTO `ordered_article`(`ordered_article_id`, `ordering_id`, `article_id`, `status`) VALUES ('0','$ordering_id','$pizzas[$i]','0')";
                 $recordset = $this->_database->query($sql);
@@ -183,6 +184,7 @@ class Bestellung extends Page
     public static function main(): void
     {
         try {
+            session_start();
             $page = new Bestellung();
             $page->processReceivedData();
             $page->generateView();

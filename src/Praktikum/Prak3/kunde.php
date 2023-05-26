@@ -66,13 +66,15 @@ class Kunde extends Page
      */
     protected function getViewData(): array
     {
+        //take ordering_id from session
+        $ordering_id_SES = $_SESSION['ordering_id'];
         // to do: fetch data for this view from the database
         // to do: return array containing data
         $pizza = array();
         $query = "SELECT * FROM `ordered_article`
         INNER JOIN `article` ON `ordered_article`.`article_id` = `article`.`article_id`
-        INNER JOIN `ordering` ON `ordered_article`.`ordering_id` = `ordering`.`ordering_id`
-        ORDER BY `ordering`.`ordering_id` ASC";
+        INNER JOIN `ordering` ON `ordered_article`.`ordering_id` = $ordering_id_SES
+        WHERE `ordering`.`ordering_id` = $ordering_id_SES";
         $recordset = $this->_database->query($query);
         if (!$recordset) {
             throw new Exception("Abfrage fehlgeschlagen: " . $this->_database->error);
@@ -147,6 +149,7 @@ class Kunde extends Page
     public static function main(): void
     {
         try {
+            session_start();
             $page = new Kunde();
             $page->processReceivedData();
             $page->generateView();
