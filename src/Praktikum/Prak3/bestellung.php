@@ -98,7 +98,6 @@ class Bestellung extends Page
         $this->generatePageHeader('Pizza Service'); //to do: set optional parameters
 
         for ($i = 0; $i < count($data); $i++) {
-            $article_id = $data[$i][0];
             $pizza_name = $data[$i][1];
             $price = $data[$i][2];
             echo <<< HTML
@@ -114,19 +113,20 @@ class Bestellung extends Page
             </section>\n
             HTML;
         }
+
         echo <<< HTML
-      
-        <form action="bestellung.php" method="post" accept>
+        <section>
+        <form action="bestellung.php" method="post" >
             <h1>Warenkorb</h1>
-            <select name="pizza[]" multiple>
-            <option value="1" id="pizza1">Salami</option>
+            <select tabindex="1" name="pizza[]" multiple>
+            <option selected value="1" id="pizza1">Salami</option>
             <option value="2" id="pizza2">Vegetaria</option>
-            <option value="3" id="pizza3">Spinat Huenchen</option>
+            <option value="3" id="pizza3">Spinat Huehnchen</option>
             </select>
             <input name="Adresse" type="text" value="" placeholder="ihre Adresse" >
-            <button tabindex="1" accesskey="l">Alle Loeschen</button>
-            <button tabindex="2" accesskey="a">Auswahl Loeschen</button>
-            <input  tabindex="3" type="submit" accesskey="b" value="Bestellen" >
+            <button tabindex="2" accesskey="l">Alle Loeschen</button>
+            <button tabindex="3" accesskey="a">Auswahl Loeschen</button>
+            <input  tabindex="4" type="submit" accesskey="b" value="Bestellen" >
         </form>
         </section>
         HTML;
