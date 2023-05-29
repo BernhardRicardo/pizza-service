@@ -147,7 +147,8 @@ class Bestellung extends Page
         if (isset($_POST["pizza"]) && isset($_POST["Adresse"])) {
             $ordering_id = $this->_database->insert_id;
             $address = $_POST["Adresse"];
-            $sql = "INSERT INTO ordering (ordering_id ,address) VALUES ('$ordering_id' , '$address')";
+            $escaped_address = $this->_database->real_escape_string($address);
+            $sql = "INSERT INTO ordering (ordering_id ,address) VALUES ('$ordering_id' , '$escaped_address')";
             $recordset = $this->_database->query($sql);
             if (!$recordset) throw new Exception("Fehler in Abfrage: " . $this->_database->error);
             //make new order
@@ -163,7 +164,8 @@ class Bestellung extends Page
              //set ordering id to session
              $_SESSION["ordering_id"] = $ordering_id;
             for ($i = 0; $i < count($pizzas); $i++) {
-                $sql = "INSERT INTO `ordered_article`(`ordered_article_id`, `ordering_id`, `article_id`, `status`) VALUES ('0','$ordering_id','$pizzas[$i]','0')";
+                $escaped_pizza = $this->_database->real_escape_string($pizzas[$i]);
+                $sql = "INSERT INTO `ordered_article`(`ordered_article_id`, `ordering_id`, `article_id`, `status`) VALUES ('0','$ordering_id','$escaped_pizza','0')";
                 $recordset = $this->_database->query($sql);
                 if (!$recordset) throw new Exception("Fehler in Abfrage: " . $this->_database->error);
             }
