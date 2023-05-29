@@ -1,23 +1,21 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 // UTF-8 marker äöüÄÖÜß€
 /**
- * Class Kunde for the exercises of the EWA lecture
+ * Class PageTemplate for the exercises of the EWA lecture
  * Demonstrates use of PHP including class and OO.
  * Implements Zend coding standards.
  * Generate documentation with Doxygen or phpdoc
  *
  * PHP Version 7.4
  *
- * @file     Kunde.php
+ * @file     PageTemplate.php
  * @package  Page Templates
  * @author   Bernhard Kreling, <bernhard.kreling@h-da.de>
  * @author   Ralf Hahn, <ralf.hahn@h-da.de>
  * @version  3.1
  */
 
-// to do: change name 'Kunde' throughout this file
+// to do: change name 'PageTemplate' throughout this file
 require_once './Page.php';
 
 /**
@@ -31,7 +29,7 @@ require_once './Page.php';
  * @author   Bernhard Kreling, <bernhard.kreling@h-da.de>
  * @author   Ralf Hahn, <ralf.hahn@h-da.de>
  */
-class Kunde extends Page
+class KundenStatus extends Page
 {
     // to do: declare reference variables for members 
     // representing substructures/blocks
@@ -64,28 +62,23 @@ class Kunde extends Page
 	 * @return array An array containing the requested data. 
 	 * This may be a normal array, an empty array or an associative array.
      */
-    protected function getViewData(): array
+    protected function getViewData():array
     {
-        //take ordering_id from session
-        $ordering_id_SES = $_SESSION['ordering_id'];
         // to do: fetch data for this view from the database
-        // to do: return array containing data
-        $pizza = array();
-        $query = "SELECT * FROM `ordered_article`
-        INNER JOIN `article` ON `ordered_article`.`article_id` = `article`.`article_id`
-        INNER JOIN `ordering` ON `ordered_article`.`ordering_id` = $ordering_id_SES
-        WHERE `ordering`.`ordering_id` = $ordering_id_SES";
-        $recordset = $this->_database->query($query);
-        if (!$recordset) {
-            throw new Exception("Abfrage fehlgeschlagen: " . $this->_database->error);
+		// to do: return array containing data
+        $ordering_id = $_SESSION['ordering_id'];
+
+        $query = "SELECT * FROM ordering WHERE ordering_id = '$ordering_id'";
+        $result = $this->_database->query($query);
+
+        $statusData = array();
+        while ($row = $result->fetch_assoc()) {
+            $statusData[] = $row;
         }
-        $record = $recordset->fetch_assoc();
-        while ($record) {
-            $pizza[] = $record;
-            $record = $recordset->fetch_assoc();
-        }
-        $recordset->free();
-        return $pizza;
+
+        return $statusData;
+
+
     }
 
     /**
@@ -96,32 +89,19 @@ class Kunde extends Page
      * Finally, the footer is added.
 	 * @return void
      */
-    protected function generateView(): void
+    protected function generateView():void
     {
 		$data = $this->getViewData();
-        $this->generatePageHeader('Kunde Bestellungsinformation'); //to do: set optional parameters
-        $current_ordering_id = NULL;
-        for ($i = 0; $i < count($data); $i++) {
-            $ordering_id = $data[$i]['ordering_id']; //16
-            $address = $data[$i]['address']; //Birken
-            $special_address = htmlspecialchars($address);
-            $name = $data[$i]['name']; //pizza
-            //print the order
-            if ($current_ordering_id != $ordering_id) {
-                echo <<<HTML
-                <h1>Bestellung: $ordering_id</h1>
-                <h2>Adresse: $special_address</h2>
-                HTML;
-            }
-            echo <<<HTML
-            <section>
-            <p>$name</p>
-            </section>
-            HTML;
-            $current_ordering_id = $ordering_id;
-        }
+        //$this->generatePageHeader('to do: change headline'); //to do: set optional parameters
         // to do: output view of this page
-        $this->generatePageFooter();
+        //$this->generatePageFooter();
+        header("Content-type: application/json; charset=UTF-8");
+
+        //Serialize the data as jason
+        $serializedData = json_encode($data);
+
+        //Output the serialized data
+        echo $serializedData;
     }
 
     /**
@@ -130,7 +110,7 @@ class Kunde extends Page
      * data do it here.
 	 * @return void
      */
-    protected function processReceivedData(): void
+    protected function processReceivedData():void
     {
         parent::processReceivedData();
         // to do: call processReceivedData() for all members
@@ -147,11 +127,11 @@ class Kunde extends Page
      * call it without first creating an instance of the class.
 	 * @return void
      */
-    public static function main(): void
+    public static function main():void
     {
         try {
             session_start();
-            $page = new Kunde();
+            $page = new KundenStatus();
             $page->processReceivedData();
             $page->generateView();
         } catch (Exception $e) {
@@ -164,7 +144,7 @@ class Kunde extends Page
 
 // This call is starting the creation of the page. 
 // That is input is processed and output is created.
-Kunde::main();
+KundenStatus::main();
 
 // Zend standard does not like closing php-tag!
 // PHP doesn't require the closing tag (it is assumed when the file ends). 
