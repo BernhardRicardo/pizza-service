@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 // UTF-8 marker äöüÄÖÜß€
 /**
@@ -147,10 +146,9 @@ class Bestellung extends Page
         //make new user
         if (isset($_POST["pizza"]) && isset($_POST["Adresse"])) {
             $ordering_id = $this->_database->insert_id;
-            $escaped_ordering_id = $this->_database->real_escape_string($ordering_id);
             $address = $_POST["Adresse"];
             $escaped_address = $this->_database->real_escape_string($address);
-            $sql = "INSERT INTO ordering (ordering_id ,address) VALUES ('$escaped_ordering_id' , '$escaped_address')";
+            $sql = "INSERT INTO ordering (ordering_id ,address) VALUES ('$ordering_id' , '$escaped_address')";
             $recordset = $this->_database->query($sql);
             if (!$recordset) throw new Exception("Fehler in Abfrage: " . $this->_database->error);
             //make new order
@@ -163,9 +161,11 @@ class Bestellung extends Page
             $recordset->free();
             //insert pizza
             $pizzas = $_POST["pizza"];
+             //set ordering id to session
+             $_SESSION["ordering_id"] = $ordering_id;
             for ($i = 0; $i < count($pizzas); $i++) {
                 $escaped_pizza = $this->_database->real_escape_string($pizzas[$i]);
-                $sql = "INSERT INTO `ordered_article`(`ordered_article_id`, `ordering_id`, `article_id`, `status`) VALUES ('0','$escaped_ordering_id','$escaped_pizza','0')";
+                $sql = "INSERT INTO `ordered_article`(`ordered_article_id`, `ordering_id`, `article_id`, `status`) VALUES ('0','$ordering_id','$escaped_pizza','0')";
                 $recordset = $this->_database->query($sql);
                 if (!$recordset) throw new Exception("Fehler in Abfrage: " . $this->_database->error);
             }
@@ -186,6 +186,7 @@ class Bestellung extends Page
     public static function main(): void
     {
         try {
+            session_start();
             $page = new Bestellung();
             $page->processReceivedData();
             $page->generateView();

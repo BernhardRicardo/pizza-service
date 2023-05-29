@@ -3,21 +3,21 @@
 declare(strict_types=1);
 // UTF-8 marker äöüÄÖÜß€
 /**
- * Class PageTemplate for the exercises of the EWA lecture
+ * Class Fahrer for the exercises of the EWA lecture
  * Demonstrates use of PHP including class and OO.
  * Implements Zend coding standards.
  * Generate documentation with Doxygen or phpdoc
  *
  * PHP Version 7.4
  *
- * @file     PageTemplate.php
+ * @file     Fahrer.php
  * @package  Page Templates
  * @author   Bernhard Kreling, <bernhard.kreling@h-da.de>
  * @author   Ralf Hahn, <ralf.hahn@h-da.de>
  * @version  3.1
  */
 
-// to do: change name 'PageTemplate' throughout this file
+// to do: change name 'Fahrer' throughout this file
 require_once './Page.php';
 
 /**
@@ -31,7 +31,7 @@ require_once './Page.php';
  * @author   Bernhard Kreling, <bernhard.kreling@h-da.de>
  * @author   Ralf Hahn, <ralf.hahn@h-da.de>
  */
-class Bestellung extends Page
+class Fahrer extends Page
 {
     // to do: declare reference variables for members 
     // representing substructures/blocks
@@ -61,27 +61,29 @@ class Bestellung extends Page
     /**
      * Fetch all data that is necessary for later output.
      * Data is returned in an array e.g. as associative array.
-     * @return array An array containing the requested data. 
-     * This may be a normal array, an empty array or an associative array.
+	 * @return array An array containing the requested data. 
+	 * This may be a normal array, an empty array or an associative array.
      */
     protected function getViewData(): array
     {
         // to do: fetch data for this view from the database
         // to do: return array containing data
-        $article_list = array();
-        $sql = "SELECT a.article_id, a.name, a.price FROM article a";
-        $recordset = $this->_database->query($sql);
-        if (!$recordset) throw new Exception("Fehler in Abfrage: " . $this->_database->error);
-
-        // read selected records into result array
-        while ($record = $recordset->fetch_assoc()) {
-            $article_id = $record["article_id"];
-            $pizza_name = $record["name"];
-            $price = $record["price"];
-            array_push($article_list, array($article_id, $pizza_name, $price));
+        $pizza = array();
+        $query = "SELECT * FROM `ordered_article`
+                INNER JOIN `article` ON `ordered_article`.`article_id` = `article`.`article_id`
+                INNER JOIN `ordering` ON `ordered_article`.`ordering_id` = `ordering`.`ordering_id`
+                ORDER BY `ordered_article`.`ordering_id` ASC";
+        $recordset = $this->_database->query($query);
+        if (!$recordset) {
+            throw new Exception("Abfrage fehlgeschlagen: " . $this->_database->error);
+        }
+        $record = $recordset->fetch_assoc();
+        while ($record) {
+            $pizza[] = $record;
+            $record = $recordset->fetch_assoc();
         }
         $recordset->free();
-        return $article_list;
+        return $pizza;
     }
 
     /**
@@ -90,46 +92,55 @@ class Bestellung extends Page
      * of the page ("view") is inserted and -if available- the content of
      * all views contained is generated.
      * Finally, the footer is added.
-     * @return void
+	 * @return void
      */
     protected function generateView(): void
     {
-        $data = $this->getViewData();
-        $this->generatePageHeader('Pizza Service'); //to do: set optional parameters
+		$data = $this->getViewData();
+        $this->generatePageHeader('Fahrer Seite'); //to do: set optional parameters
 
-        for ($i = 0; $i < count($data); $i++) {
-            $pizza_name = $data[$i][1];
-            $price = $data[$i][2];
-            echo <<< HTML
-            <section>
-            <img
-                width="100"
-                height="100"
-                src="../images/41J3qSlgJiL.jpg"
-                alt=$pizza_name
-            />
-            <h2>$pizza_name</h2>
-            <h3>$ $price</h3>
-            </section>\n
-            HTML;
+        $current_order_id = NULL;
+        $pizza = "";
+        $print = false;
+        for($i = 0; $i < count($data); $i++){
+
+            if($current_order_id != $data[$i]['ordering_id']){
+                if($current_order_id != NULL && $print){
+                    substr($pizza, 0, -3);
+                    $status = $data[$i-1]['status'];
+                    $isFertig = ($status == 2) ? 'checked' : '';
+                    $isUnterwegs = ($status == 3) ? 'checked' : '';
+                    $isGeliefert = ($status == 4) ? 'checked' : '';
+                    echo <<<HTML
+                    <form action="fahrer.php" method="post">
+                        <meta http-equiv="Refresh" content="10; URL=fahrer.php">
+                        <label><b>{$data[$i-1]['address']}</b></label>
+                        <br>
+                        <label><b>$pizza</b></label>
+                        <br>
+                        <input type="hidden" name="ordering_id" value="$current_order_id">
+                        <input type="radio" name="status" value="fertig" {$isFertig}>
+                        <label for="html">fertig</label>
+                        <input type="radio" name="status" value="unterwegs" {$isUnterwegs}>
+                        <label for="html">unterwegs</label>
+                        <input type="radio" name="status" value="geliefert" {$isGeliefert}>                    
+                        <label for="html">geliefert</label>
+                        <input type="submit" name="submit" value="Update">
+                    </form>
+HTML;
+                }
+                $current_order_id = $data[$i]['ordering_id'];
+                $pizza = "";
+                $print = true;
+            }
+            else if($data[$i]['status'] >= 2 && $print){
+                $pizza .= $data[$i]['name'] . ", ";
+            }else{
+                $print = false;
+            }
         }
 
-        echo <<< HTML
-        <section>
-        <form action="bestellung.php" method="post" >
-            <h1>Warenkorb</h1>
-            <select tabindex="1" name="pizza[]" multiple>
-            <option selected value="1" id="pizza1">Salami</option>
-            <option value="2" id="pizza2">Vegetaria</option>
-            <option value="3" id="pizza3">Spinat Huehnchen</option>
-            </select>
-            <input name="Adresse" type="text" value="" placeholder="ihre Adresse" >
-            <button tabindex="2" accesskey="l">Alle Loeschen</button>
-            <button tabindex="3" accesskey="a">Auswahl Loeschen</button>
-            <input  tabindex="4" type="submit" accesskey="b" value="Bestellen" >
-        </form>
-        </section>
-        HTML;
+        
         // to do: output view of this page
         $this->generatePageFooter();
     }
@@ -144,31 +155,18 @@ class Bestellung extends Page
     {
         parent::processReceivedData();
         // to do: call processReceivedData() for all members
-        //make new user
-        if (isset($_POST["pizza"]) && isset($_POST["Adresse"])) {
-            $ordering_id = $this->_database->insert_id;
-            $escaped_ordering_id = $this->_database->real_escape_string($ordering_id);
-            $address = $_POST["Adresse"];
-            $escaped_address = $this->_database->real_escape_string($address);
-            $sql = "INSERT INTO ordering (ordering_id ,address) VALUES ('$escaped_ordering_id' , '$escaped_address')";
-            $recordset = $this->_database->query($sql);
-            if (!$recordset) throw new Exception("Fehler in Abfrage: " . $this->_database->error);
-            //make new order
-            $sql = "SELECT ordering_id FROM ordering ORDER BY ordering_time DESC LIMIT 1";
-            $recordset = $this->_database->query($sql);
-            // read selected records into result array
-            while ($record = $recordset->fetch_assoc()) {
-                $ordering_id = $record["ordering_id"];
+
+        if (isset($_POST['submit']) && isset($_POST['ordering_id']) && isset($_POST['status'])) {
+            $status = $_POST['status'];
+            $status = ($status == 'fertig') ? 2 : (($status == 'unterwegs') ? 3 : 4);
+            $ordering_id = $_POST['ordering_id'];
+            $query = "UPDATE `ordered_article` SET `status` = '$status' WHERE `ordered_article`.`ordering_id` = '$ordering_id'";
+            $recordset = $this->_database->query($query);
+            if (!$recordset) {
+                throw new Exception("Abfrage fehlgeschlagen: " . $this->_database->error);
             }
-            $recordset->free();
-            //insert pizza
-            $pizzas = $_POST["pizza"];
-            for ($i = 0; $i < count($pizzas); $i++) {
-                $escaped_pizza = $this->_database->real_escape_string($pizzas[$i]);
-                $sql = "INSERT INTO `ordered_article`(`ordered_article_id`, `ordering_id`, `article_id`, `status`) VALUES ('0','$escaped_ordering_id','$escaped_pizza','0')";
-                $recordset = $this->_database->query($sql);
-                if (!$recordset) throw new Exception("Fehler in Abfrage: " . $this->_database->error);
-            }
+            header("Location: fahrer.php", true, 303);
+            die();
         }
     }
 
@@ -181,12 +179,12 @@ class Bestellung extends Page
      * indicate that function as the central starting point.
      * To make it simpler this is a static function. That is you can simply
      * call it without first creating an instance of the class.
-     * @return void
+	 * @return void
      */
     public static function main(): void
     {
         try {
-            $page = new Bestellung();
+            $page = new Fahrer();
             $page->processReceivedData();
             $page->generateView();
         } catch (Exception $e) {
@@ -199,7 +197,7 @@ class Bestellung extends Page
 
 // This call is starting the creation of the page. 
 // That is input is processed and output is created.
-Bestellung::main();
+Fahrer::main();
 
 // Zend standard does not like closing php-tag!
 // PHP doesn't require the closing tag (it is assumed when the file ends). 
