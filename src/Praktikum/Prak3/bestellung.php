@@ -164,7 +164,7 @@ class Bestellung extends Page
              //set ordering id to session
              $_SESSION["ordering_id"] = $ordering_id;
             for ($i = 0; $i < count($pizzas); $i++) {
-                $escaped_pizza = $this->_database->real_escape_string($pizzas[$i]);
+                $escaped_pizza= $this->_database->real_escape_string($pizzas[$i]);
                 $sql = "INSERT INTO `ordered_article`(`ordered_article_id`, `ordering_id`, `article_id`, `status`) VALUES ('0','$ordering_id','$escaped_pizza','0')";
                 $recordset = $this->_database->query($sql);
                 if (!$recordset) throw new Exception("Fehler in Abfrage: " . $this->_database->error);
