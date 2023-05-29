@@ -115,10 +115,11 @@ class Fahrer extends Page
                     $isFertig = ($status == 2) ? 'checked' : '';
                     $isUnterwegs = ($status == 3) ? 'checked' : '';
                     $isGeliefert = ($status == 4) ? 'checked' : '';
+                    $special_address = htmlspecialchars($data[$i-1]['address']);
                     echo <<<HTML
                     <form action="fahrer.php" method="post">
                         <meta http-equiv="Refresh" content="10; URL=fahrer.php">
-                        <label><b>{$data[$i-1]['address']}</b></label>
+                        <label><b>$special_address</b></label>
                         <br>
                         <label><b>$pizza</b></label>
                         <br>
