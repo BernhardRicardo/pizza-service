@@ -145,12 +145,12 @@ class Bestellung extends Page
         // to do: call processReceivedData() for all members
         //make new user
         if (isset($_POST["pizza"]) && isset($_POST["Adresse"])) {
-            $ordering_id = $this->_database->insert_id;
             $address = $_POST["Adresse"];
             $escaped_address = $this->_database->real_escape_string($address);
-            $sql = "INSERT INTO ordering (ordering_id ,address) VALUES ('$ordering_id' , '$escaped_address')";
+            $sql = "INSERT INTO ordering (address) VALUES ('$escaped_address')";
             $recordset = $this->_database->query($sql);
             if (!$recordset) throw new Exception("Fehler in Abfrage: " . $this->_database->error);
+            $ordering_id = $this->_database->insert_id;
             //make new order
             $sql = "SELECT ordering_id FROM ordering ORDER BY ordering_time DESC LIMIT 1";
             $recordset = $this->_database->query($sql);
