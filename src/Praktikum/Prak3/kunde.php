@@ -61,8 +61,8 @@ class Kunde extends Page
     /**
      * Fetch all data that is necessary for later output.
      * Data is returned in an array e.g. as associative array.
-	 * @return array An array containing the requested data. 
-	 * This may be a normal array, an empty array or an associative array.
+     * @return array An array containing the requested data. 
+     * This may be a normal array, an empty array or an associative array.
      */
     protected function getViewData(): array
     {
@@ -94,11 +94,11 @@ class Kunde extends Page
      * of the page ("view") is inserted and -if available- the content of
      * all views contained is generated.
      * Finally, the footer is added.
-	 * @return void
+     * @return void
      */
     protected function generateView(): void
     {
-		$data = $this->getViewData();
+        $data = $this->getViewData();
         $this->generatePageHeader('Kunde Bestellungsinformation'); //to do: set optional parameters
         $current_ordering_id = NULL;
         for ($i = 0; $i < count($data); $i++) {
@@ -128,7 +128,7 @@ class Kunde extends Page
      * Processes the data that comes via GET or POST.
      * If this page is supposed to do something with submitted
      * data do it here.
-	 * @return void
+     * @return void
      */
     protected function processReceivedData(): void
     {
@@ -145,7 +145,7 @@ class Kunde extends Page
      * indicate that function as the central starting point.
      * To make it simpler this is a static function. That is you can simply
      * call it without first creating an instance of the class.
-	 * @return void
+     * @return void
      */
     public static function main(): void
     {
