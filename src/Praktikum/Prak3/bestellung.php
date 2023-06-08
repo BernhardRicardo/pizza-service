@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 // UTF-8 marker äöüÄÖÜß€
 /**
@@ -98,17 +99,19 @@ class Bestellung extends Page
 
         for ($i = 0; $i < count($data); $i++) {
             $pizza_name = $data[$i][1];
+            $special_pizza_name = htmlspecialchars($pizza_name);
             $price = $data[$i][2];
+            $special_price = htmlspecialchars($price);
             echo <<< HTML
             <section>
             <img
                 width="100"
                 height="100"
                 src="../images/41J3qSlgJiL.jpg"
-                alt=$pizza_name
+                alt=$special_pizza_name
             />
-            <h2>$pizza_name</h2>
-            <h3>$ $price</h3>
+            <h2>$special_pizza_name</h2>
+            <h3>$ $special_price</h3>
             </section>\n
             HTML;
         }
@@ -161,10 +164,10 @@ class Bestellung extends Page
             $recordset->free();
             //insert pizza
             $pizzas = $_POST["pizza"];
-             //set ordering id to session
-             $_SESSION["ordering_id"] = $ordering_id;
+            //set ordering id to session
+            $_SESSION["ordering_id"] = $ordering_id;
             for ($i = 0; $i < count($pizzas); $i++) {
-                $escaped_pizza= $this->_database->real_escape_string($pizzas[$i]);
+                $escaped_pizza = $this->_database->real_escape_string($pizzas[$i]);
                 $sql = "INSERT INTO `ordered_article`(`ordered_article_id`, `ordering_id`, `article_id`, `status`) VALUES ('0','$ordering_id','$escaped_pizza','0')";
                 $recordset = $this->_database->query($sql);
                 if (!$recordset) throw new Exception("Fehler in Abfrage: " . $this->_database->error);

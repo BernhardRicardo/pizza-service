@@ -67,6 +67,9 @@ class Kunde extends Page
     protected function getViewData(): array
     {
         //take ordering_id from session
+        if (!isset($_SESSION['ordering_id'])) {
+            return array();
+        }
         $ordering_id_SES = $_SESSION['ordering_id'];
         // to do: fetch data for this view from the database
         // to do: return array containing data
@@ -103,19 +106,21 @@ class Kunde extends Page
         $current_ordering_id = NULL;
         for ($i = 0; $i < count($data); $i++) {
             $ordering_id = $data[$i]['ordering_id']; //16
+            $special_ordering_id = htmlspecialchars($ordering_id);
             $address = $data[$i]['address']; //Birken
             $special_address = htmlspecialchars($address);
             $name = $data[$i]['name']; //pizza
+            $special_pizza_name = htmlspecialchars($name);
             //print the order
             if ($current_ordering_id != $ordering_id) {
                 echo <<<HTML
-                <h1>Bestellung: $ordering_id</h1>
+                <h1>Bestellung: $special_ordering_id</h1>
                 <h2>Adresse: $special_address</h2>
                 HTML;
             }
             echo <<<HTML
             <section>
-            <p>$name</p>
+            <p>$special_pizza_name</p>
             </section>
             HTML;
             $current_ordering_id = $ordering_id;
