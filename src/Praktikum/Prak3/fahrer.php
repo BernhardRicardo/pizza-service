@@ -61,8 +61,8 @@ class Fahrer extends Page
     /**
      * Fetch all data that is necessary for later output.
      * Data is returned in an array e.g. as associative array.
-	 * @return array An array containing the requested data. 
-	 * This may be a normal array, an empty array or an associative array.
+     * @return array An array containing the requested data. 
+     * This may be a normal array, an empty array or an associative array.
      */
     protected function getViewData(): array
     {
@@ -92,36 +92,37 @@ class Fahrer extends Page
      * of the page ("view") is inserted and -if available- the content of
      * all views contained is generated.
      * Finally, the footer is added.
-	 * @return void
+     * @return void
      */
     protected function generateView(): void
     {
-		$data = $this->getViewData();
+        $data = $this->getViewData();
         $this->generatePageHeader('Fahrer Seite'); //to do: set optional parameters
 
         $current_order_id = $data[0]['ordering_id'];
         $pizza = "";
         $print = true;
-        for($i = 0; $i < count($data); $i++){
-            
-            if($i == count($data)-1){
+        for ($i = 0; $i < count($data); $i++) {
+
+            if ($i == count($data) - 1) {
                 $pizza .= $data[$i]['name'] . ", ";
             }
 
-            if(($current_order_id != $data[$i]['ordering_id']) || ($i == count($data)-1)){
-                if($current_order_id != NULL && $print){
+            if (($current_order_id != $data[$i]['ordering_id']) || ($i == count($data) - 1)) {
+                if ($current_order_id != NULL && $print) {
                     $pizza = substr($pizza, 0, -2);
-                    $status = $data[$i-1]['status'];
+                    $special_pizza = htmlspecialchars($pizza);
+                    $status = $data[$i - 1]['status'];
                     $isFertig = ($status == 2) ? 'checked' : '';
                     $isUnterwegs = ($status == 3) ? 'checked' : '';
                     $isGeliefert = ($status == 4) ? 'checked' : '';
-                    $special_address = htmlspecialchars($data[$i-1]['address']);
+                    $special_address = htmlspecialchars($data[$i - 1]['address']);
                     echo <<<HTML
                     <form action="fahrer.php" method="post">
                         <meta http-equiv="Refresh" content="10; URL=fahrer.php">
                         <label><b>$special_address</b></label>
                         <br>
-                        <label><b>$pizza</b></label>
+                        <label><b>$special_pizza</b></label>
                         <br>
                         <input type="hidden" name="ordering_id" value="$current_order_id">
                         <input type="radio" name="status" value="fertig" {$isFertig}>
@@ -134,22 +135,20 @@ class Fahrer extends Page
                     </form>
 HTML;
                 }
-                
-                
             }
-            if($current_order_id != $data[$i]['ordering_id']){
+            if ($current_order_id != $data[$i]['ordering_id']) {
                 $current_order_id = $data[$i]['ordering_id'];
                 $pizza = "";
                 $print = true;
             }
-            if($data[$i]['status'] >= 2 && $print){
+            if ($data[$i]['status'] >= 2 && $print) {
                 $pizza .= $data[$i]['name'] . ", ";
-            }else{
+            } else {
                 $print = false;
             }
         }
 
-        
+
         // to do: output view of this page
         $this->generatePageFooter();
     }
@@ -188,7 +187,7 @@ HTML;
      * indicate that function as the central starting point.
      * To make it simpler this is a static function. That is you can simply
      * call it without first creating an instance of the class.
-	 * @return void
+     * @return void
      */
     public static function main(): void
     {

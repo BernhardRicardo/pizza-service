@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 // UTF-8 marker äöüÄÖÜß€
 /**
  * Class PageTemplate for the exercises of the EWA lecture
@@ -59,13 +61,17 @@ class KundenStatus extends Page
     /**
      * Fetch all data that is necessary for later output.
      * Data is returned in an array e.g. as associative array.
-	 * @return array An array containing the requested data. 
-	 * This may be a normal array, an empty array or an associative array.
+     * @return array An array containing the requested data. 
+     * This may be a normal array, an empty array or an associative array.
      */
-    protected function getViewData():array
+    protected function getViewData(): array
     {
         // to do: fetch data for this view from the database
-		// to do: return array containing data
+        // to do: return array containing data
+        //take ordering_id from session
+        if (!isset($_SESSION['ordering_id'])) {
+            return array();
+        }
         $ordering_id = $_SESSION['ordering_id'];
 
         $query = "SELECT * FROM ordering WHERE ordering_id = '$ordering_id'";
@@ -77,8 +83,6 @@ class KundenStatus extends Page
         }
 
         return $statusData;
-
-
     }
 
     /**
@@ -87,11 +91,11 @@ class KundenStatus extends Page
      * of the page ("view") is inserted and -if available- the content of
      * all views contained is generated.
      * Finally, the footer is added.
-	 * @return void
+     * @return void
      */
-    protected function generateView():void
+    protected function generateView(): void
     {
-		$data = $this->getViewData();
+        $data = $this->getViewData();
         //$this->generatePageHeader('to do: change headline'); //to do: set optional parameters
         // to do: output view of this page
         //$this->generatePageFooter();
@@ -108,9 +112,9 @@ class KundenStatus extends Page
      * Processes the data that comes via GET or POST.
      * If this page is supposed to do something with submitted
      * data do it here.
-	 * @return void
+     * @return void
      */
-    protected function processReceivedData():void
+    protected function processReceivedData(): void
     {
         parent::processReceivedData();
         // to do: call processReceivedData() for all members
@@ -125,9 +129,9 @@ class KundenStatus extends Page
      * indicate that function as the central starting point.
      * To make it simpler this is a static function. That is you can simply
      * call it without first creating an instance of the class.
-	 * @return void
+     * @return void
      */
-    public static function main():void
+    public static function main(): void
     {
         try {
             session_start();
