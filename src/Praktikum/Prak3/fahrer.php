@@ -177,8 +177,19 @@ HTML;
             die();
         }
 
+        // delete in ordering table when status in ordered_article table is 4
+        $query = "DELETE FROM `ordering` WHERE `ordering`.`ordering_id` IN (SELECT `ordering_id` FROM `ordered_article` WHERE `status` = 4)";
+        $recordset = $this->_database->query($query);
+        if (!$recordset) {
+            throw new Exception("Abfrage fehlgeschlagen: " . $this->_database->error);
+        }
 
-
+        // delete in ordered_article table when status is 4
+        $query = "DELETE FROM `ordered_article` WHERE `status` = 4";
+        $recordset = $this->_database->query($query);
+        if (!$recordset) {
+            throw new Exception("Abfrage fehlgeschlagen: " . $this->_database->error);
+        }
     }
 
     /**
