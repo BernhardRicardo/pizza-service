@@ -151,7 +151,7 @@ class Kunde extends Page
     {
         try {
             
-            
+            session_start();
             $page = new Kunde();
             $page->processReceivedData();
             $page->generateView();

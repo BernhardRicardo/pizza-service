@@ -61,15 +61,12 @@ class Kunde extends Page
     /**
      * Fetch all data that is necessary for later output.
      * Data is returned in an array e.g. as associative array.
-     * @return array An array containing the requested data. 
-     * This may be a normal array, an empty array or an associative array.
+	 * @return array An array containing the requested data. 
+	 * This may be a normal array, an empty array or an associative array.
      */
     protected function getViewData(): array
     {
         //take ordering_id from session
-        if (!isset($_SESSION['ordering_id'])) {
-            return array();
-        }
         $ordering_id_SES = $_SESSION['ordering_id'];
         // to do: fetch data for this view from the database
         // to do: return array containing data
@@ -97,30 +94,28 @@ class Kunde extends Page
      * of the page ("view") is inserted and -if available- the content of
      * all views contained is generated.
      * Finally, the footer is added.
-     * @return void
+	 * @return void
      */
     protected function generateView(): void
     {
-        $data = $this->getViewData();
+		$data = $this->getViewData();
         $this->generatePageHeader('Kunde Bestellungsinformation'); //to do: set optional parameters
         $current_ordering_id = NULL;
         for ($i = 0; $i < count($data); $i++) {
             $ordering_id = $data[$i]['ordering_id']; //16
-            $special_ordering_id = htmlspecialchars($ordering_id);
             $address = $data[$i]['address']; //Birken
             $special_address = htmlspecialchars($address);
             $name = $data[$i]['name']; //pizza
-            $special_pizza_name = htmlspecialchars($name);
             //print the order
             if ($current_ordering_id != $ordering_id) {
                 echo <<<HTML
-                <h1>Bestellung: $special_ordering_id</h1>
+                <h1>Bestellung: $ordering_id</h1>
                 <h2>Adresse: $special_address</h2>
                 HTML;
             }
             echo <<<HTML
             <section>
-            <p>$special_pizza_name</p>
+            <p>$name</p>
             </section>
             HTML;
             $current_ordering_id = $ordering_id;
@@ -133,7 +128,7 @@ class Kunde extends Page
      * Processes the data that comes via GET or POST.
      * If this page is supposed to do something with submitted
      * data do it here.
-     * @return void
+	 * @return void
      */
     protected function processReceivedData(): void
     {
@@ -150,11 +145,12 @@ class Kunde extends Page
      * indicate that function as the central starting point.
      * To make it simpler this is a static function. That is you can simply
      * call it without first creating an instance of the class.
-     * @return void
+	 * @return void
      */
     public static function main(): void
     {
         try {
+            
             session_start();
             $page = new Kunde();
             $page->processReceivedData();
