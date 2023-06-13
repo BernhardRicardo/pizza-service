@@ -98,8 +98,7 @@ class Fahrer extends Page
     {
         $data = $this->getViewData();
         $this->generatePageHeader('Fahrer Seite'); //to do: set optional parameters
-
-        $current_order_id = $data[0]['ordering_id'];
+        $current_order_id = NULL;
         $pizza = "";
         $print = true;
         for ($i = 0; $i < count($data); $i++) {
@@ -110,6 +109,7 @@ class Fahrer extends Page
 
             if (($current_order_id != $data[$i]['ordering_id']) || ($i == count($data) - 1)) {
                 if ($current_order_id != NULL && $print) {
+                    $current_order_id = $data[0]['ordering_id'];
                     $pizza = substr($pizza, 0, -2);
                     $special_pizza = htmlspecialchars($pizza);
                     $status = $data[$i - 1]['status'];
@@ -117,9 +117,11 @@ class Fahrer extends Page
                     $isUnterwegs = ($status == 3) ? 'checked' : '';
                     $isGeliefert = ($status == 4) ? 'checked' : '';
                     $special_address = htmlspecialchars($data[$i - 1]['address']);
+                    $special_ordering_id = htmlspecialchars($data[$i - 1]['ordering_id']);
                     echo <<<HTML
                     <form action="fahrer.php" method="post">
                         <meta http-equiv="Refresh" content="10; URL=fahrer.php">
+                        <label><b>Bestellnummer: $special_ordering_id</b></label>
                         <label><b>$special_address</b></label>
                         <br>
                         <label><b>$special_pizza</b></label>
