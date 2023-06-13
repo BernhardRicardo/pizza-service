@@ -3,21 +3,21 @@
 declare(strict_types=1);
 // UTF-8 marker äöüÄÖÜß€
 /**
- * Class Kunde for the exercises of the EWA lecture
+ * Class PageTemplate for the exercises of the EWA lecture
  * Demonstrates use of PHP including class and OO.
  * Implements Zend coding standards.
  * Generate documentation with Doxygen or phpdoc
  *
  * PHP Version 7.4
  *
- * @file     Kunde.php
+ * @file     PageTemplate.php
  * @package  Page Templates
  * @author   Bernhard Kreling, <bernhard.kreling@h-da.de>
  * @author   Ralf Hahn, <ralf.hahn@h-da.de>
  * @version  3.1
  */
 
-// to do: change name 'Kunde' throughout this file
+// to do: change name 'PageTemplate' throughout this file
 require_once './Page.php';
 
 /**
@@ -31,7 +31,7 @@ require_once './Page.php';
  * @author   Bernhard Kreling, <bernhard.kreling@h-da.de>
  * @author   Ralf Hahn, <ralf.hahn@h-da.de>
  */
-class Kunde extends Page
+class Bestellung extends Page
 {
     // to do: declare reference variables for members 
     // representing substructures/blocks
@@ -61,31 +61,27 @@ class Kunde extends Page
     /**
      * Fetch all data that is necessary for later output.
      * Data is returned in an array e.g. as associative array.
-	 * @return array An array containing the requested data. 
-	 * This may be a normal array, an empty array or an associative array.
+     * @return array An array containing the requested data. 
+     * This may be a normal array, an empty array or an associative array.
      */
     protected function getViewData(): array
     {
-        //take ordering_id from session
-        $ordering_id_SES = $_SESSION['ordering_id'];
         // to do: fetch data for this view from the database
         // to do: return array containing data
-        $pizza = array();
-        $query = "SELECT * FROM `ordered_article`
-        INNER JOIN `article` ON `ordered_article`.`article_id` = `article`.`article_id`
-        INNER JOIN `ordering` ON `ordered_article`.`ordering_id` = $ordering_id_SES
-        WHERE `ordering`.`ordering_id` = $ordering_id_SES";
-        $recordset = $this->_database->query($query);
-        if (!$recordset) {
-            throw new Exception("Abfrage fehlgeschlagen: " . $this->_database->error);
-        }
-        $record = $recordset->fetch_assoc();
-        while ($record) {
-            $pizza[] = $record;
-            $record = $recordset->fetch_assoc();
+        $article_list = array();
+        $sql = "SELECT a.article_id, a.name, a.price FROM article a";
+        $recordset = $this->_database->query($sql);
+        if (!$recordset) throw new Exception("Fehler in Abfrage: " . $this->_database->error);
+
+        // read selected records into result array
+        while ($record = $recordset->fetch_assoc()) {
+            $article_id = $record["article_id"];
+            $pizza_name = $record["name"];
+            $price = $record["price"];
+            array_push($article_list, array($article_id, $pizza_name, $price));
         }
         $recordset->free();
-        return $pizza;
+        return $article_list;
     }
 
     /**
@@ -94,32 +90,48 @@ class Kunde extends Page
      * of the page ("view") is inserted and -if available- the content of
      * all views contained is generated.
      * Finally, the footer is added.
-	 * @return void
+     * @return void
      */
     protected function generateView(): void
     {
-		$data = $this->getViewData();
-        $this->generatePageHeader('Kunde Bestellungsinformation'); //to do: set optional parameters
-        $current_ordering_id = NULL;
+        $data = $this->getViewData();
+        $this->generatePageHeader('Pizza Service'); //to do: set optional parameters
+
         for ($i = 0; $i < count($data); $i++) {
-            $ordering_id = $data[$i]['ordering_id']; //16
-            $address = $data[$i]['address']; //Birken
-            $special_address = htmlspecialchars($address);
-            $name = $data[$i]['name']; //pizza
-            //print the order
-            if ($current_ordering_id != $ordering_id) {
-                echo <<<HTML
-                <h1>Bestellung: $ordering_id</h1>
-                <h2>Adresse: $special_address</h2>
-                HTML;
-            }
-            echo <<<HTML
+            $pizza_name = $data[$i][1];
+            $special_pizza_name = htmlspecialchars($pizza_name);
+            $price = $data[$i][2];
+            $special_price = htmlspecialchars($price);
+            echo <<< HTML
             <section>
-            <p>$name</p>
-            </section>
+            <img
+                width="100"
+                height="100"
+                src="../images/41J3qSlgJiL.jpg"
+                alt=$special_pizza_name
+            />
+            <h2>$special_pizza_name</h2>
+            <h3>$ $special_price</h3>
+            </section>\n
             HTML;
-            $current_ordering_id = $ordering_id;
         }
+
+        echo <<< HTML
+        <section>
+        <form action="bestellung.php" method="post" >
+            <h1>Warenkorb</h1>
+            <select tabindex="1" name="pizza[]" multiple>
+            <option selected value="1" id="pizza1">Salami</option>
+            <option value="2" id="pizza2">Vegetaria</option>
+            <option value="3" id="pizza3">Spinat Huehnchen</option>
+            </select>
+            <input name="Adresse" type="text" value="" placeholder="ihre Adresse" >
+            <button tabindex="2" accesskey="l">Alle Loeschen</button>
+            <button tabindex="3" accesskey="a">Auswahl Loeschen</button>
+            <input  tabindex="4" type="submit" accesskey="b" value="Bestellen" >
+        </form>
+        </section>
+        HTML;
         // to do: output view of this page
         $this->generatePageFooter();
     }
@@ -128,12 +140,39 @@ class Kunde extends Page
      * Processes the data that comes via GET or POST.
      * If this page is supposed to do something with submitted
      * data do it here.
-	 * @return void
+     * @return void
      */
     protected function processReceivedData(): void
     {
         parent::processReceivedData();
         // to do: call processReceivedData() for all members
+        //make new user
+        if (isset($_POST["pizza"]) && isset($_POST["Adresse"])) {
+            $address = $_POST["Adresse"];
+            $escaped_address = $this->_database->real_escape_string($address);
+            $sql = "INSERT INTO ordering (address) VALUES ('$escaped_address')";
+            $recordset = $this->_database->query($sql);
+            if (!$recordset) throw new Exception("Fehler in Abfrage: " . $this->_database->error);
+            $ordering_id = $this->_database->insert_id;
+            //make new order
+            $sql = "SELECT ordering_id FROM ordering ORDER BY ordering_time DESC LIMIT 1";
+            $recordset = $this->_database->query($sql);
+            // read selected records into result array
+            while ($record = $recordset->fetch_assoc()) {
+                $ordering_id = $record["ordering_id"];
+            }
+            $recordset->free();
+            //insert pizza
+            $pizzas = $_POST["pizza"];
+            //set ordering id to session
+            $_SESSION["ordering_id"] = $ordering_id;
+            for ($i = 0; $i < count($pizzas); $i++) {
+                $escaped_pizza = $this->_database->real_escape_string($pizzas[$i]);
+                $sql = "INSERT INTO `ordered_article`(`ordered_article_id`, `ordering_id`, `article_id`, `status`) VALUES ('0','$ordering_id','$escaped_pizza','0')";
+                $recordset = $this->_database->query($sql);
+                if (!$recordset) throw new Exception("Fehler in Abfrage: " . $this->_database->error);
+            }
+        }
     }
 
     /**
@@ -145,14 +184,13 @@ class Kunde extends Page
      * indicate that function as the central starting point.
      * To make it simpler this is a static function. That is you can simply
      * call it without first creating an instance of the class.
-	 * @return void
+     * @return void
      */
     public static function main(): void
     {
         try {
-            
             session_start();
-            $page = new Kunde();
+            $page = new Bestellung();
             $page->processReceivedData();
             $page->generateView();
         } catch (Exception $e) {
@@ -165,7 +203,7 @@ class Kunde extends Page
 
 // This call is starting the creation of the page. 
 // That is input is processed and output is created.
-Kunde::main();
+Bestellung::main();
 
 // Zend standard does not like closing php-tag!
 // PHP doesn't require the closing tag (it is assumed when the file ends). 

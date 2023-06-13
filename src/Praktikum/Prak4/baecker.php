@@ -3,21 +3,21 @@
 declare(strict_types=1);
 // UTF-8 marker äöüÄÖÜß€
 /**
- * Class Kunde for the exercises of the EWA lecture
+ * Class Baecker for the exercises of the EWA lecture
  * Demonstrates use of PHP including class and OO.
  * Implements Zend coding standards.
  * Generate documentation with Doxygen or phpdoc
  *
  * PHP Version 7.4
  *
- * @file     Kunde.php
+ * @file     Baecker.php
  * @package  Page Templates
  * @author   Bernhard Kreling, <bernhard.kreling@h-da.de>
  * @author   Ralf Hahn, <ralf.hahn@h-da.de>
  * @version  3.1
  */
 
-// to do: change name 'Kunde' throughout this file
+// to do: change name 'Baecker' throughout this file
 require_once './Page.php';
 
 /**
@@ -31,7 +31,7 @@ require_once './Page.php';
  * @author   Bernhard Kreling, <bernhard.kreling@h-da.de>
  * @author   Ralf Hahn, <ralf.hahn@h-da.de>
  */
-class Kunde extends Page
+class Baecker extends Page
 {
     // to do: declare reference variables for members 
     // representing substructures/blocks
@@ -61,20 +61,15 @@ class Kunde extends Page
     /**
      * Fetch all data that is necessary for later output.
      * Data is returned in an array e.g. as associative array.
-	 * @return array An array containing the requested data. 
-	 * This may be a normal array, an empty array or an associative array.
+     * @return array An array containing the requested data. 
+     * This may be a normal array, an empty array or an associative array.
      */
     protected function getViewData(): array
     {
-        //take ordering_id from session
-        $ordering_id_SES = $_SESSION['ordering_id'];
-        // to do: fetch data for this view from the database
-        // to do: return array containing data
         $pizza = array();
         $query = "SELECT * FROM `ordered_article`
-        INNER JOIN `article` ON `ordered_article`.`article_id` = `article`.`article_id`
-        INNER JOIN `ordering` ON `ordered_article`.`ordering_id` = $ordering_id_SES
-        WHERE `ordering`.`ordering_id` = $ordering_id_SES";
+                    JOIN article ON ordered_article.article_id = article.article_id
+                    ORDER BY `ordered_article`.`ordering_id` ASC";
         $recordset = $this->_database->query($query);
         if (!$recordset) {
             throw new Exception("Abfrage fehlgeschlagen: " . $this->_database->error);
@@ -86,6 +81,8 @@ class Kunde extends Page
         }
         $recordset->free();
         return $pizza;
+        // to do: fetch data for this view from the database
+        // to do: return array containing data
     }
 
     /**
@@ -94,31 +91,58 @@ class Kunde extends Page
      * of the page ("view") is inserted and -if available- the content of
      * all views contained is generated.
      * Finally, the footer is added.
-	 * @return void
+     * @return void
      */
     protected function generateView(): void
     {
-		$data = $this->getViewData();
-        $this->generatePageHeader('Kunde Bestellungsinformation'); //to do: set optional parameters
+        $data = $this->getViewData();
+        $this->generatePageHeader('Baecker Seite'); //to do: set optional parameters
+
         $current_ordering_id = NULL;
         for ($i = 0; $i < count($data); $i++) {
-            $ordering_id = $data[$i]['ordering_id']; //16
-            $address = $data[$i]['address']; //Birken
-            $special_address = htmlspecialchars($address);
-            $name = $data[$i]['name']; //pizza
-            //print the order
-            if ($current_ordering_id != $ordering_id) {
-                echo <<<HTML
-                <h1>Bestellung: $ordering_id</h1>
-                <h2>Adresse: $special_address</h2>
+            if($data[$i]['status'] > 2){
+                continue;
+            }
+            if ($current_ordering_id != $data[$i]['ordering_id']) {
+                $current_ordering_id = $data[$i]['ordering_id'];
+                $special_current_id = htmlspecialchars($current_ordering_id);
+                if ($i != 0) {
+                    echo <<< HTML
+                    </table>
+                    HTML;
+                }
+
+                echo <<< HTML
+                <h2>Bestellung: $special_current_id</h2>
+                <table>
+                    <tr>
+                        <th></th>
+                        <th>bestellt</th>
+                        <th>im Offen</th>   
+                        <th>fertig</th>
+                        <th></th>
+                    </tr>
                 HTML;
             }
-            echo <<<HTML
-            <section>
-            <p>$name</p>
-            </section>
+            $status = $data[$i]['status'];
+            $isBestellt = ($status == 0) ? 'checked' : '';
+            $isImOffen = ($status == 1) ? 'checked' : '';
+            $isFertig = ($status == 2) ? 'checked' : '';
+            $special_pizza_name = htmlspecialchars($data[$i]['name']);
+            echo <<< HTML
+            <tr>
+                <form action="baecker.php" method="post">
+                    <meta http-equiv="Refresh" content="10; URL=baecker.php">
+                    <td>$special_pizza_name</td>
+                    <td><input type="radio" name="order_status_{$data[$i]['ordered_article_id']}" value="bestellt" {$isBestellt}></td>
+                    <td><input type="radio" name="order_status_{$data[$i]['ordered_article_id']}" value="im_offen" {$isImOffen}></td>
+                    <td><input type="radio" name="order_status_{$data[$i]['ordered_article_id']}" value="fertig" {$isFertig}></td>
+                    <input type="hidden" name="ordering_id" value="{$data[$i]['ordering_id']}">
+                    <input type="hidden" name="ordered_article_id" value="{$data[$i]['ordered_article_id']}">
+                    <td><input type="submit" name="submit" value="Update"></td> 
+                </form>
+            </tr>
             HTML;
-            $current_ordering_id = $ordering_id;
         }
         // to do: output view of this page
         $this->generatePageFooter();
@@ -128,12 +152,26 @@ class Kunde extends Page
      * Processes the data that comes via GET or POST.
      * If this page is supposed to do something with submitted
      * data do it here.
-	 * @return void
+     * @return void
      */
     protected function processReceivedData(): void
     {
         parent::processReceivedData();
         // to do: call processReceivedData() for all members
+        // set new status
+        if (isset($_POST['submit']) && isset($_POST['ordering_id']) && isset($_POST['ordered_article_id']) && isset($_POST['order_status_' . $_POST['ordered_article_id']])) {
+            $ordering_id = $_POST['ordering_id'];
+            $ordered_article_id = $_POST['ordered_article_id'];
+            $status = $_POST['order_status_' . $ordered_article_id];
+            $status = ($status == 'bestellt') ? 0 : (($status == 'im_offen') ? 1 : 2);
+            $query = "UPDATE `ordered_article` SET `status` = $status WHERE `ordered_article`.`ordered_article_id` = $ordered_article_id";
+            $recordset = $this->_database->query($query);
+            if (!$recordset) {
+                throw new Exception("Abfrage fehlgeschlagen: " . $this->_database->error);
+            }
+            header("Location: baecker.php", true, 303);
+            die();
+        }
     }
 
     /**
@@ -145,14 +183,12 @@ class Kunde extends Page
      * indicate that function as the central starting point.
      * To make it simpler this is a static function. That is you can simply
      * call it without first creating an instance of the class.
-	 * @return void
+     * @return void
      */
     public static function main(): void
     {
         try {
-            
-            session_start();
-            $page = new Kunde();
+            $page = new Baecker();
             $page->processReceivedData();
             $page->generateView();
         } catch (Exception $e) {
@@ -165,7 +201,7 @@ class Kunde extends Page
 
 // This call is starting the creation of the page. 
 // That is input is processed and output is created.
-Kunde::main();
+Baecker::main();
 
 // Zend standard does not like closing php-tag!
 // PHP doesn't require the closing tag (it is assumed when the file ends). 
