@@ -67,6 +67,9 @@ class Kunde extends Page
     protected function getViewData(): array
     {
         //take ordering_id from session
+        if (!isset($_SESSION['ordering_id'])) {
+            return array();
+        }
         $ordering_id_SES = $_SESSION['ordering_id'];
         // to do: fetch data for this view from the database
         // to do: return array containing data
