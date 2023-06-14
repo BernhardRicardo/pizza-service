@@ -78,5 +78,4 @@ function changePizzaStatus(value){
     var status = document.getElementById("value");
     //set the new status to the pizza
     status.value = value;
-
 }
