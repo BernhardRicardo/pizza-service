@@ -95,9 +95,11 @@ class Bestellung extends Page
     protected function generateView(): void
     {
         $data = $this->getViewData();
-        $this->generatePageHeader('Pizza Service'); //to do: set optional parameters
+        $this->generatePageHeader('Pizza Service', 'script.js'); //to do: set optional parameters
 
         for ($i = 0; $i < count($data); $i++) {
+            $article_id = $data[$i][0];
+            $special_article_id = htmlspecialchars($article_id);
             $pizza_name = $data[$i][1];
             $special_pizza_name = htmlspecialchars($pizza_name);
             $price = $data[$i][2];
@@ -109,6 +111,7 @@ class Bestellung extends Page
                 height="100"
                 src="../images/41J3qSlgJiL.jpg"
                 alt=$special_pizza_name
+                onclick="addToCart('$special_pizza_name','$special_price','$special_article_id')"
             />
             <h2>$special_pizza_name</h2>
             <h3>$ $special_price</h3>
@@ -118,17 +121,15 @@ class Bestellung extends Page
 
         echo <<< HTML
         <section>
-        <form action="bestellung.php" method="post" >
+        <form action="bestellung.php" method="post">
             <h1>Warenkorb</h1>
-            <select tabindex="1" name="pizza[]" multiple>
-            <option selected value="1" id="pizza1">Salami</option>
-            <option value="2" id="pizza2">Vegetaria</option>
-            <option value="3" id="pizza3">Spinat Huehnchen</option>
+            <select tabindex="1" name="pizza[]" id="cart" multiple="multiple" required>
             </select>
-            <input name="Adresse" type="text" value="" placeholder="ihre Adresse" >
-            <button tabindex="2" accesskey="l">Alle Loeschen</button>
-            <button tabindex="3" accesskey="a">Auswahl Loeschen</button>
-            <input  tabindex="4" type="submit" accesskey="b" value="Bestellen" >
+            <p id="total">Price:</p>
+            <input name="Adresse" type="text" value="" placeholder="ihre Adresse" required>
+            <button type="button" tabindex="2" accesskey="a" onclick="removeFromCart()">Auswahl Loeschen</button>
+            <button type="button" tabindex="3" accesskey="l" onclick="clearCart()">Alle Loeschen</button>
+            <button tabindex="4" type="submit" accesskey="b" value="Bestellen" onclick="selectAll()" >Bestellen</button>
         </form>
         </section>
         HTML;
