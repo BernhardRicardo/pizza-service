@@ -118,7 +118,7 @@ class Bestellung extends Page
 
         echo <<< HTML
         <section>
-        <form action="bestellung.php" method="post" >
+        <form action="https://echo.fbi.h-da.de/" method="post" >
             <h1>Warenkorb</h1>
             <select tabindex="1" name="pizza[]" multiple>
             <option selected value="1" id="pizza1">Salami</option>
