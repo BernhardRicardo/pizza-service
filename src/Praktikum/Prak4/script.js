@@ -71,3 +71,12 @@ function selectAll(){
         cart.options[i].selected = true;
     }
 }
+
+//radio button function to change the pizza status
+function changePizzaStatus(value){
+    "use strict";
+    var status = document.getElementById("value");
+    //set the new status to the pizza
+    status.value = value;
+
+}

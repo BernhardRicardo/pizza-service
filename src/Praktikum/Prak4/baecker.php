@@ -100,7 +100,7 @@ class Baecker extends Page
 
         $current_ordering_id = NULL;
         for ($i = 0; $i < count($data); $i++) {
-            if($data[$i]['status'] > 2){
+            if ($data[$i]['status'] > 2) {
                 continue;
             }
             if ($current_ordering_id != $data[$i]['ordering_id']) {
@@ -134,12 +134,12 @@ class Baecker extends Page
                 <form action="baecker.php" method="post">
                     <meta http-equiv="Refresh" content="10; URL=baecker.php">
                     <td>$special_pizza_name</td>
-                    <td><input type="radio" name="order_status_{$data[$i]['ordered_article_id']}" value="bestellt" {$isBestellt}></td>
-                    <td><input type="radio" name="order_status_{$data[$i]['ordered_article_id']}" value="im_offen" {$isImOffen}></td>
-                    <td><input type="radio" name="order_status_{$data[$i]['ordered_article_id']}" value="fertig" {$isFertig}></td>
+                    <td><input type="radio" name="order_status_{$data[$i]['ordered_article_id']}" value="bestellt" {$isBestellt} onclick="changePizzaStatus(value)"></td>
+                    <td><input type="radio" name="order_status_{$data[$i]['ordered_article_id']}" value="im_offen" {$isImOffen} onclick="changePizzaStatus(value)"></td>
+                    <td><input type="radio" name="order_status_{$data[$i]['ordered_article_id']}" value="fertig" {$isFertig} onclick="changePizzaStatus(value)"></td>
                     <input type="hidden" name="ordering_id" value="{$data[$i]['ordering_id']}">
                     <input type="hidden" name="ordered_article_id" value="{$data[$i]['ordered_article_id']}">
-                    <td><input type="submit" name="submit" value="Update"></td> 
+                     
                 </form>
             </tr>
             HTML;
