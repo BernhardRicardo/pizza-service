@@ -61,6 +61,7 @@ function clearCart(){
     var cart = document.getElementById("cart");
     cart.textContent = "";
     countTotalPrice();
+    checkInputs();
 }
 
 //select all item in cart
@@ -69,5 +70,19 @@ function selectAll(){
     var cart = document.getElementById("cart");
     for(var i = 0; i < cart.length; i++){
         cart.options[i].selected = true;
+    }
+}
+
+function checkInputs(){
+    "use strict";
+    var cart = document.getElementById("cart");
+    var cartValue = cart.options.value;
+    var addressValue = document.getElementById("inputAddress").value;
+    var btnSubmit = document.getElementById("btnSubmit");
+
+    if((cartValue == "" && cart.length > 1) || addressValue == ""){
+        btnSubmit.disabled = true;
+    }else{
+        btnSubmit.disabled = false;
     }
 }
