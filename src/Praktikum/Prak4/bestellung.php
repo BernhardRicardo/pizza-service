@@ -123,13 +123,13 @@ class Bestellung extends Page
         <section>
         <form action="bestellung.php" method="post">
             <h1>Warenkorb</h1>
-            <select tabindex="1" name="pizza[]" id="cart" multiple="multiple" required>
+            <select tabindex="1" name="pizza[]" id="cart" multiple="multiple" onchange="checkInputs()">
             </select>
             <p id="total">Price:</p>
-            <input name="Adresse" type="text" value="" placeholder="ihre Adresse" required>
+            <input name="Adresse" id="inputAddress" type="text" value="" placeholder="ihre Adresse" oninput="checkInputs()">
             <button type="button" tabindex="2" accesskey="a" onclick="removeFromCart()">Auswahl Loeschen</button>
             <button type="button" tabindex="3" accesskey="l" onclick="clearCart()">Alle Loeschen</button>
-            <button tabindex="4" type="submit" accesskey="b" value="Bestellen" onclick="selectAll()" >Bestellen</button>
+            <button tabindex="4" id="btnSubmit" type="submit" accesskey="b" value="Bestellen" onclick="selectAll()" disabled>Bestellen</button>
         </form>
         </section>
         HTML;
