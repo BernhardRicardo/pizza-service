@@ -129,14 +129,15 @@ class Baecker extends Page
             $isImOffen = ($status == 1) ? 'checked' : '';
             $isFertig = ($status == 2) ? 'checked' : '';
             $special_pizza_name = htmlspecialchars($data[$i]['name']);
+            $special_ordered_article_id = htmlspecialchars($data[$i]['ordered_article_id']);
             echo <<< HTML
             <tr>
-                <form id="formid" action="baecker.php" method="post">
+                <form id="formid$special_ordered_article_id" action="baecker.php" method="post">
                     <meta http-equiv="Refresh" content="10; URL=baecker.php">
                     <td>$special_pizza_name</td>
-                    <td><input type="radio" name="order_status_{$data[$i]['ordered_article_id']}" value="bestellt" {$isBestellt} onclick="document.forms['formid'].submit()" ></td>
-                    <td><input type="radio" name="order_status_{$data[$i]['ordered_article_id']}" value="im_offen" {$isImOffen} onclick="document.forms['formid'].submit()"></td>
-                    <td><input type="radio" name="order_status_{$data[$i]['ordered_article_id']}" value="fertig" {$isFertig} onclick="document.forms['formid'].submit()"></td>
+                    <td><input type="radio" name="order_status_{$data[$i]['ordered_article_id']}" value="bestellt" {$isBestellt} onclick="document.forms['formid$special_ordered_article_id'].submit();" ></td>
+                    <td><input type="radio" name="order_status_{$data[$i]['ordered_article_id']}" value="im_offen" {$isImOffen} onclick="document.forms['formid$special_ordered_article_id'].submit();"></td>
+                    <td><input type="radio" name="order_status_{$data[$i]['ordered_article_id']}" value="fertig" {$isFertig} onclick="document.forms['formid$special_ordered_article_id'].submit();"></td>
                     <input type="hidden" name="ordering_id" value="{$data[$i]['ordering_id']}">
                     <input type="hidden" name="ordered_article_id" value="{$data[$i]['ordered_article_id']}">
                 </form>
