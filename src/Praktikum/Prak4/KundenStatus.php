@@ -104,8 +104,11 @@ class KundenStatus extends Page
         //$this->generatePageFooter();
         header("Content-type: application/json; charset=UTF-8");
 
+        //Set the character encoding for JSON encoding
+        mb_internal_encoding('UTF-8');
+
         //Serialize the data as json
-        $serializedData = json_encode($data);
+        $serializedData = json_encode($data, JSON_UNESCAPED_UNICODE);
 
         //Output the serialized data
         echo $serializedData;
