@@ -9,6 +9,7 @@ function addToCart(name,price,value){
     item.textContent = name;
     cart.appendChild(item);
     countTotalPrice();
+    checkInputs();
 }
 
 //remove from cart
@@ -23,6 +24,7 @@ function removeFromCart(){
     }
     );
     countTotalPrice();
+    checkInputs();
 }
 
 function findAllSelected(){
@@ -50,7 +52,6 @@ function countTotalPrice() {
       total += parseFloat(Number(cart.options[i].price));
     }
   
-    console.log(total);
     totalElement.textContent = "Price: $" + total.toFixed(2).toString();
   }
   
@@ -58,8 +59,8 @@ function countTotalPrice() {
 //clear cart
 function clearCart(){
     "use strict";
-    var cart = document.getElementById("cart");
-    cart.textContent = "";
+    selectAll();
+    removeFromCart();
     countTotalPrice();
     checkInputs();
 }
@@ -79,8 +80,7 @@ function checkInputs(){
     var cartValue = cart.options.value;
     var addressValue = document.getElementById("inputAddress").value;
     var btnSubmit = document.getElementById("btnSubmit");
-
-    if((cartValue == "" && cart.length > 1) || addressValue == ""){
+    if(cart.length == 0 || addressValue == ""){
         btnSubmit.disabled = true;
     }else{
         btnSubmit.disabled = false;
