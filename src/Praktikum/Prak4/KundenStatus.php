@@ -72,9 +72,12 @@ class KundenStatus extends Page
         if (!isset($_SESSION['ordering_id'])) {
             return array();
         }
-        $ordering_id = $_SESSION['ordering_id'];
+        $ordering_id_SES = $_SESSION['ordering_id'];
 
-        $query = "SELECT * FROM ordering WHERE ordering_id = '$ordering_id'";
+        $query = "SELECT ordering.ordering_id, ordered_article_id, ordered_article.article_id, article.name, ordered_article.status FROM `ordered_article`
+        INNER JOIN `article` ON `ordered_article`.`article_id` = `article`.`article_id`
+        INNER JOIN `ordering` ON `ordered_article`.`ordering_id` = $ordering_id_SES
+        WHERE `ordering`.`ordering_id` = $ordering_id_SES";
         $result = $this->_database->query($query);
 
         $statusData = array();
@@ -101,7 +104,7 @@ class KundenStatus extends Page
         //$this->generatePageFooter();
         header("Content-type: application/json; charset=UTF-8");
 
-        //Serialize the data as jason
+        //Serialize the data as json
         $serializedData = json_encode($data);
 
         //Output the serialized data
