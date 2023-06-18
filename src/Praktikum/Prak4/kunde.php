@@ -102,8 +102,16 @@ class Kunde extends Page
     protected function generateView(): void
     {
 		$data = $this->getViewData();
-        $this->generatePageHeader('Kunde Bestellungsinformation'); //to do: set optional parameters
-        $current_ordering_id = NULL;
+        $this->generatePageHeader('Kunde Bestellungsinformation', 'UpdateStatus.js'); //to do: set optional parameters
+       
+        // Add the status container
+        echo '<div id="status-container"></div>';
+        
+        // Include the UpdateStatus.js script with the correct path to KundenStatus.php
+        echo '<script src="UpdateStatus.js"></script>';
+
+
+        /*$current_ordering_id = NULL;
         for ($i = 0; $i < count($data); $i++) {
             $ordering_id = $data[$i]['ordering_id']; //16
             $address = $data[$i]['address']; //Birken
@@ -125,6 +133,7 @@ class Kunde extends Page
         }
         // to do: output view of this page
         $this->generatePageFooter();
+        */
     }
 
     /**
