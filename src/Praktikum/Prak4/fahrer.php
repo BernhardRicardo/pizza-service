@@ -119,7 +119,7 @@ class Fahrer extends Page
                     $special_address = htmlspecialchars($data[$i - 1]['address']);
                     $special_ordering_id = htmlspecialchars($data[$i - 1]['ordering_id']);
                     echo <<<HTML
-                    <form action="fahrer.php" method="post">
+                    <form id="formid$special_ordering_id" action="fahrer.php" method="post">
                         <meta http-equiv="Refresh" content="10; URL=fahrer.php">
                         <label><b>Bestellnummer: $special_ordering_id</b></label>
                         <label><b>$special_address</b></label>
@@ -127,14 +127,13 @@ class Fahrer extends Page
                         <label><b>$special_pizza</b></label>
                         <br>
                         <input type="hidden" name="ordering_id" value="$current_order_id">
-                        <input type="radio" name="status" value="fertig" {$isFertig}>
+                        <input type="radio" name="status" value="fertig" {$isFertig} onclick="document.forms['formid$special_ordering_id'].submit();" >
                         <label for="html">fertig</label>
-                        <input type="radio" name="status" value="unterwegs" {$isUnterwegs}>
+                        <input type="radio" name="status" value="unterwegs" {$isUnterwegs} onclick="document.forms['formid$special_ordering_id'].submit();" >
                         <label for="html">unterwegs</label>
-                        <input type="radio" name="status" value="geliefert" {$isGeliefert}>                    
+                        <input type="radio" name="status" value="geliefert" {$isGeliefert} onclick="document.forms['formid$special_ordering_id'].submit();" >                    
                         <label for="html">geliefert</label>
                         <input type="hidden" name="ordering_id" value="{$data[$i-1]['ordering_id']}">
-                        <input type="submit" name="submit" value="Update">
                     </form>
 HTML;
                 }
@@ -167,7 +166,7 @@ HTML;
         parent::processReceivedData();
         // to do: call processReceivedData() for all members
 
-        if (isset($_POST['submit']) && isset($_POST['ordering_id']) && isset($_POST['status'])) {
+        if (isset($_POST['ordering_id']) && isset($_POST['status'])) {
             $status = $_POST['status'];
             $status = ($status == 'fertig') ? 2 : (($status == 'unterwegs') ? 3 : 4);
             $ordering_id = $_POST['ordering_id'];
