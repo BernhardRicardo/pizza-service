@@ -133,6 +133,7 @@ class Fahrer extends Page
                         <label for="html">unterwegs</label>
                         <input type="radio" name="status" value="geliefert" {$isGeliefert}>                    
                         <label for="html">geliefert</label>
+                        <input type="hidden" name="ordering_id" value="{$data[$i-1]['ordering_id']}">
                         <input type="submit" name="submit" value="Update">
                     </form>
 HTML;
