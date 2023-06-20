@@ -100,7 +100,7 @@ class Baecker extends Page
 
         $current_ordering_id = NULL;
         for ($i = 0; $i < count($data); $i++) {
-            if($data[$i]['status'] > 2){
+            if ($data[$i]['status'] > 2) {
                 continue;
             }
             if ($current_ordering_id != $data[$i]['ordering_id']) {
