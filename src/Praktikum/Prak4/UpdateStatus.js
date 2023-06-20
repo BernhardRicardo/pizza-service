@@ -51,10 +51,24 @@ function process(jsonData) {
     articleName.textContent = "Article Name: " + statusObj.name;
     statusElement.appendChild(articleName);
 
-    const status = document.createElement("p");
-    status.textContent = "Status: " + statusObj.status;
-    statusElement.appendChild(status);
-
+    for (let i = 0; i < 5; i++) {
+      const radio = document.createElement("input");
+      radio.type = "radio";
+      radio.name = "status";
+      radio.value = i;
+      statusElement.appendChild(radio);
+  
+      const label = document.createElement("label");
+      label.textContent = i;
+      statusElement.appendChild(label);
+      // Add spacing between radio buttons
+      statusElement.appendChild(document.createTextNode(" "));
+  
+      // Check the radio button that matches the current status
+      if (statusObj.status == i) {
+        radio.checked = true;
+      }
+    }
     statusContainer.appendChild(statusElement);
   });
 }
