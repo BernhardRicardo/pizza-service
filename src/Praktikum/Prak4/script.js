@@ -52,6 +52,7 @@ function countTotalPrice() {
       total += parseFloat(Number(cart.options[i].price));
     }
   
+    console.log(total);
     totalElement.textContent = "Price: $" + total.toFixed(2).toString();
   }
   
@@ -59,8 +60,8 @@ function countTotalPrice() {
 //clear cart
 function clearCart(){
     "use strict";
-    selectAll();
-    removeFromCart();
+    var cart = document.getElementById("cart");
+    cart.textContent = "";
     countTotalPrice();
     checkInputs();
 }
@@ -80,7 +81,8 @@ function checkInputs(){
     var cartValue = cart.options.value;
     var addressValue = document.getElementById("inputAddress").value;
     var btnSubmit = document.getElementById("btnSubmit");
-    if(cart.length == 0 || addressValue == ""){
+
+    if((cartValue == "" && cart.length > 1) || addressValue == ""){
         btnSubmit.disabled = true;
     }else{
         btnSubmit.disabled = false;

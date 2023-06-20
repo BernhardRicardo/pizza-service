@@ -39,22 +39,50 @@ function process(jsonData) {
     return;
   }
 
+  //Make paragraph for order id
+  const orderId = document.createElement("p");
+  orderId.textContent = "Order ID: "+jsonData[0].ordering_id;
+  statusContainer.appendChild(orderId);
+
+
   jsonData.forEach(statusObj => {
     const statusElement = document.createElement("div");
     statusElement.classList.add("status");
 
-    const orderId = document.createElement("p");
-    orderId.textContent = "Order ID: " + statusObj.ordering_id;
-    statusElement.appendChild(orderId);
+
 
     const articleName = document.createElement("p");
-    articleName.textContent = "Article Name: " + statusObj.name;
+    articleName.textContent = "Pizza: " + statusObj.name;
     statusElement.appendChild(articleName);
 
-    const status = document.createElement("p");
-    status.textContent = "Status: " + statusObj.status;
-    statusElement.appendChild(status);
-
+    for (let i = 0; i < 5; i++) {
+      const radio = document.createElement("input");
+      radio.type = "radio";
+      radio.name = "status_"+statusObj.ordered_article_id;
+      radio.value = i;
+      statusElement.appendChild(radio);
+  
+      const label = document.createElement("label");
+      if(i== 0) {
+      label.textContent = "Bestellt";
+      } else if(i == 1) {
+        label.textContent = "Im Offen";
+      } else if(i == 2) {
+        label.textContent = "Fertig";
+      } else if(i == 3) {
+        label.textContent = "unterwegs";
+      } else if(i == 4) {
+        label.textContent = "Geliefert";
+      }
+      statusElement.appendChild(label);
+      // Add spacing between radio buttons
+      statusElement.appendChild(document.createTextNode(" "));
+  
+      // Check the radio button that matches the current status
+      if (statusObj.status == i) {
+        radio.checked = true;
+      }
+    }
     statusContainer.appendChild(statusElement);
   });
 }
