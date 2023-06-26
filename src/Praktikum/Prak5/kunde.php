@@ -132,9 +132,9 @@ class Kunde extends Page
             HTML;
             $current_ordering_id = $ordering_id;
         }
+        */
         // to do: output view of this page
         $this->generatePageFooter();
-        */
     }
 
     /**
