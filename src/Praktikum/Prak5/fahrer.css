@@ -1,0 +1,42 @@
+.content{
+    background-color: #F7D6A6;
+    padding: 20px;
+    margin-left: 17rem;
+    margin-right: 15rem;
+    margin-top: 5rem;
+    padding-bottom: 5rem;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px 0px #000000;
+    text-align: center;
+    outline: 1px solid FFECDD;
+}
+
+.radio{
+    margin-top: 1.3rem;
+}
+
+.order{
+    margin-top: 1.3rem;
+}
+
+hr{
+    border-color: black;
+    background-color: black;
+    size: 8rem;
+    width: 100%;
+}
+
+label{
+    font-size: 1.2rem;
+}
+
+p{
+    font-size: 1.2rem;
+}
+
+@media screen and (max-width: 980px) {
+    .content{
+        margin-left: 8rem;
+        margin-right: 8rem;
+    }
+}
