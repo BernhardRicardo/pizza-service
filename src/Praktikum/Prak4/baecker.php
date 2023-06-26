@@ -97,7 +97,14 @@ class Baecker extends Page
     {
         $data = $this->getViewData();
         $this->generatePageHeader('Baecker Seite'); //to do: set optional parameters
-
+         // Output JavaScript code for automatic page refresh
+         echo <<<HTML
+         <script>
+             setTimeout(function() {
+             location.reload();
+             }, 10000);
+         </script>
+         HTML;
         $current_ordering_id = NULL;
         for ($i = 0; $i < count($data); $i++) {
             if ($data[$i]['status'] > 2) {
@@ -133,7 +140,6 @@ class Baecker extends Page
             echo <<< HTML
             <tr>
                 <form id="formid$special_ordered_article_id" action="baecker.php" method="post">
-                    <meta http-equiv="Refresh" content="10; URL=baecker.php">
                     <td>$special_pizza_name</td>
                     <td><input type="radio" name="order_status_{$data[$i]['ordered_article_id']}" value="bestellt" {$isBestellt} onclick="document.forms['formid$special_ordered_article_id'].submit();" ></td>
                     <td><input type="radio" name="order_status_{$data[$i]['ordered_article_id']}" value="im_offen" {$isImOffen} onclick="document.forms['formid$special_ordered_article_id'].submit();"></td>
