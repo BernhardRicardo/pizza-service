@@ -72,7 +72,7 @@ class Fahrer extends Page
         $query = "SELECT * FROM `ordered_article`
                 INNER JOIN `article` ON `ordered_article`.`article_id` = `article`.`article_id`
                 INNER JOIN `ordering` ON `ordered_article`.`ordering_id` = `ordering`.`ordering_id`
-                ORDER BY `ordered_article`.`ordering_id` ASC, ,`ordered_article`.`ordered_article_id` ASC";
+                ORDER BY `ordered_article`.`ordering_id` ASC ,`ordered_article`.`ordered_article_id` ASC";
         $recordset = $this->_database->query($query);
         if (!$recordset) {
             throw new Exception("Abfrage fehlgeschlagen: " . $this->_database->error);
