@@ -87,7 +87,7 @@ abstract class Page
      * @param bool $autoreload  true: auto reload the page every 5 s, false: not auto reload
      * @return void
      */
-    protected function generatePageHeader(string $title = "", string $jsFile = "", bool $autoreload = false):void
+    protected function generatePageHeader(string $title = "", string $jsFile = "", string $style="", bool $autoreload = false):void
     {
         $title = htmlspecialchars($title);
         header("Content-type: text/html; charset=UTF-8");
@@ -100,6 +100,7 @@ abstract class Page
                 <title>$title</title>
                 <script src='$jsFile'></script>
                 <link rel="stylesheet" href="base.css">
+                <link rel="stylesheet" href="$style">
             </head>
             <body>
         HTML;
