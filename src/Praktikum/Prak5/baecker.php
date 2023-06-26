@@ -96,34 +96,25 @@ class Baecker extends Page
     protected function generateView(): void
     {
         $data = $this->getViewData();
+        
         $this->generatePageHeader('Baecker Seite'); //to do: set optional parameters
+        echo <<<HTML
+        <script>
+            setTimeout(function() {
+            location.reload();
+            }, 10000);
+        </script>
+        HTML;
 
         $current_ordering_id = NULL;
         for ($i = 0; $i < count($data); $i++) {
             if ($data[$i]['status'] > 2) {
                 continue;
             }
-            if ($current_ordering_id != $data[$i]['ordering_id']) {
-                $current_ordering_id = $data[$i]['ordering_id'];
-                $special_current_id = htmlspecialchars($current_ordering_id);
-                if ($i != 0) {
-                    echo <<< HTML
-                    </table>
-                    HTML;
-                }
-
-                echo <<< HTML
-                <h2>Bestellung: $special_current_id</h2>
-                <table>
-                    <tr>
-                        <th></th>
-                        <th>bestellt</th>
-                        <th>im Offen</th>   
-                        <th>fertig</th>
-                        <th></th>
-                    </tr>
-                HTML;
-            }
+            
+            $current_ordering_id = $data[$i]['ordering_id'];
+            $special_current_id = htmlspecialchars($current_ordering_id);
+            
             $status = $data[$i]['status'];
             $isBestellt = ($status == 0) ? 'checked' : '';
             $isImOffen = ($status == 1) ? 'checked' : '';
@@ -131,17 +122,23 @@ class Baecker extends Page
             $special_pizza_name = htmlspecialchars($data[$i]['name']);
             $special_ordered_article_id = htmlspecialchars($data[$i]['ordered_article_id']);
             echo <<< HTML
-            <tr>
-                <form id="formid$special_ordered_article_id" action="baecker.php" method="post">
-                    <meta http-equiv="Refresh" content="10; URL=baecker.php">
-                    <td>$special_pizza_name</td>
-                    <td><input type="radio" name="order_status_{$data[$i]['ordered_article_id']}" value="bestellt" {$isBestellt} onclick="document.forms['formid$special_ordered_article_id'].submit();" ></td>
-                    <td><input type="radio" name="order_status_{$data[$i]['ordered_article_id']}" value="im_offen" {$isImOffen} onclick="document.forms['formid$special_ordered_article_id'].submit();"></td>
-                    <td><input type="radio" name="order_status_{$data[$i]['ordered_article_id']}" value="fertig" {$isFertig} onclick="document.forms['formid$special_ordered_article_id'].submit();"></td>
-                    <input type="hidden" name="ordering_id" value="{$data[$i]['ordering_id']}">
-                    <input type="hidden" name="ordered_article_id" value="{$data[$i]['ordered_article_id']}">
-                </form>
-            </tr>
+            <form id="formid$special_ordered_article_id" action="baecker.php" method="post">
+                <h2>Bestellung $special_current_id: $special_pizza_name</h2>
+                <label>Bestellt
+                    <input type="radio" name="order_status_{$data[$i]['ordered_article_id']}" value="bestellt" {$isBestellt} onclick="document.forms['formid$special_ordered_article_id'].submit();" >
+                </label>
+                <label>
+                    Im Ofen
+                    <input type="radio" name="order_status_{$data[$i]['ordered_article_id']}" value="im_offen" {$isImOffen} onclick="document.forms['formid$special_ordered_article_id'].submit();">
+                </label>
+                <label>
+                    Fertig
+                    <input type="radio" name="order_status_{$data[$i]['ordered_article_id']}" value="fertig" {$isFertig} onclick="document.forms['formid$special_ordered_article_id'].submit();">
+                </label>
+                <input type="hidden" name="ordering_id" value="{$data[$i]['ordering_id']}">
+                <input type="hidden" name="ordered_article_id" value="{$data[$i]['ordered_article_id']}">
+            </form>
+            
             HTML;
         }
         // to do: output view of this page
