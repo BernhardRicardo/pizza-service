@@ -103,10 +103,10 @@ class Kunde extends Page
     protected function generateView(): void
     {
         $data = $this->getViewData();
-        $this->generatePageHeader('Kunde Bestellungsinformation', 'UpdateStatus.js'); //to do: set optional parameters
+        $this->generatePageHeader('Kunde Bestellungsinformation', 'UpdateStatus.js', 'kunde.css'); //to do: set optional parameters
 
         // Add the status container
-        echo '<div id="status-container"></div>';
+        echo '<section id="status-container"></section>';
 
         // Include the UpdateStatus.js script with the correct path to KundenStatus.php
         echo '<script src="UpdateStatus.js"></script>';

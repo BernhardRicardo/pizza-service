@@ -39,10 +39,24 @@ function process(jsonData) {
     return;
   }
 
+  //Make h1 for kunde string
+  const kunde = document.createElement("h1");
+  kunde.textContent = "Kunde";
+  statusContainer.appendChild(kunde);
+
+  //Make hr
+  const hr = document.createElement("hr");
+  statusContainer.appendChild(hr);
+  
+
   //Make paragraph for order id
   const orderId = document.createElement("p");
   orderId.textContent = "Order ID: "+jsonData[0].ordering_id;
+  orderId.classList.add("orderId");
   statusContainer.appendChild(orderId);
+  //Style order id
+  const orderStatus = document.getElementsByClassName("orderId");
+  orderStatus[0].setAttribute("class", "order-id")
 
 
   jsonData.forEach(statusObj => {
