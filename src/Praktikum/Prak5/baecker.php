@@ -97,13 +97,18 @@ class Baecker extends Page
     {
         $data = $this->getViewData();
         
-        $this->generatePageHeader('Baecker Seite'); //to do: set optional parameters
+        $this->generatePageHeader('Baecker Seite', '', 'baecker.css'); //to do: set optional parameters
         echo <<<HTML
         <script>
             setTimeout(function() {
             location.reload();
             }, 10000);
         </script>
+        <div class="content">
+            <div>
+                <h1>Bäcker</h1>
+            </div>
+            <hr>
         HTML;
 
         $current_ordering_id = NULL;
@@ -122,25 +127,40 @@ class Baecker extends Page
             $special_pizza_name = htmlspecialchars($data[$i]['name']);
             $special_ordered_article_id = htmlspecialchars($data[$i]['ordered_article_id']);
             echo <<< HTML
-            <form id="formid$special_ordered_article_id" action="baecker.php" method="post">
-                <h2>Bestellung $special_current_id: $special_pizza_name</h2>
-                <label>Bestellt
-                    <input type="radio" name="order_status_{$data[$i]['ordered_article_id']}" value="bestellt" {$isBestellt} onclick="document.forms['formid$special_ordered_article_id'].submit();" >
-                </label>
-                <label>
-                    Im Ofen
-                    <input type="radio" name="order_status_{$data[$i]['ordered_article_id']}" value="im_offen" {$isImOffen} onclick="document.forms['formid$special_ordered_article_id'].submit();">
-                </label>
-                <label>
-                    Fertig
-                    <input type="radio" name="order_status_{$data[$i]['ordered_article_id']}" value="fertig" {$isFertig} onclick="document.forms['formid$special_ordered_article_id'].submit();">
-                </label>
-                <input type="hidden" name="ordering_id" value="{$data[$i]['ordering_id']}">
-                <input type="hidden" name="ordered_article_id" value="{$data[$i]['ordered_article_id']}">
-            </form>
+            <div class = order>
+                <form id="formid$special_ordered_article_id" action="baecker.php" method="post">
+                    <fieldset>
+                    <p>Bestellung $special_current_id: $special_pizza_name</ß2>
+                    <div class = radio>
+                        <label>Bestellt
+                            <input type="radio" name="order_status_{$data[$i]['ordered_article_id']}" value="bestellt" {$isBestellt} onclick="document.forms['formid$special_ordered_article_id'].submit();" >
+                        </label>
+                    </div>
+                    <div class = radio>
+                        <label>
+                            Im Ofen
+                            <input type="radio" name="order_status_{$data[$i]['ordered_article_id']}" value="im_offen" {$isImOffen} onclick="document.forms['formid$special_ordered_article_id'].submit();">
+                        </label>
+                    </div>
+                    <div class = radio>
+                        <label>
+                            Fertig
+                            <input type="radio" name="order_status_{$data[$i]['ordered_article_id']}" value="fertig" {$isFertig} onclick="document.forms['formid$special_ordered_article_id'].submit();">
+                        </label>
+                    </div>  
+                    <input type="hidden" name="ordering_id" value="{$data[$i]['ordering_id']}">
+                    <input type="hidden" name="ordered_article_id" value="{$data[$i]['ordered_article_id']}">
+                    </fieldset>
+                </form>
+            </div>
             
             HTML;
         }
+
+        echo <<<HTML
+        </div>
+        HTML;
+
         // to do: output view of this page
         $this->generatePageFooter();
     }

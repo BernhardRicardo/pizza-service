@@ -1,75 +1,93 @@
-.content {
+.content{
     background-color: #F7D6A6;
     padding: 20px;
-    margin-left: 25rem;
-    margin-right: 25rem;
+    margin-left: 17rem;
+    margin-right: 15rem;
     margin-top: 5rem;
     padding-bottom: 5rem;
     border-radius: 10px;
     box-shadow: 0px 0px 10px 0px #000000;
     text-align: center;
     outline: 1px solid FFECDD;
-  }
-
-.title{
-    text-align: center;
-    font-size: 30px;
-    font-weight: bold;
-    font-family: Arial, Helvetica, sans-serif;
-    margin-top: 20px;
 }
 
+hr{
+    border-color: black;
+    background-color: black;
+    size: 8rem;
+    width: 100%;
+}
 
-.menu-container {
+.flex-container {
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    box-shadow: 1.25px 1.25px 7.5px rgba(0, 0, 0, 0);
-    border-radius: 1em;
-    width: 15em;
-    height: 15em;
-    padding: 0.5em 1;
-    cursor: pointer;
+    justify-content: space-evenly;
+    flex-direction: row;
 }
 
-.warenkorb{
-    position: absolute;
-    float: right;
-    top: 50%;
-    right: -15em; /* Adjust the value as per your desired spacing */
-    transform: translate(-50%, -50%);
+.flex-menu {
+    display: flex;
+    justify-content: left;
+    flex-direction: row;
 }
 
-.textPrim{
-    font-size: 20px;
+.p-name {
+    font-size: 1.2rem;
     font-weight: bold;
-    font-family: Arial, Helvetica, sans-serif;
-    margin-top: 20px;
 }
 
-.adresse{
-    width: 30em;
-    height: 3em;
-    border-radius: 0.5em;
+.p-price {
+    font-size: 1.2rem;
+    font-weight: bold;
 }
 
-.bestellkorb{
-    width: 20em;
-    height: 15em;
+.scroll-warenkorb {
+    align-self: left;
+    width: 25em;
+    height: 7em;
 }
 
-.button{
-    width: 10em;
-    height: 2em;
-    color: white;
-    background-color: lightcoral;
-    border-radius: 0.5em;
+.carts-buttons {
+    margin-top: 1.5em;
 }
 
-.bestellen{
+.input-data {
+    margin-top: 1.5em;
+}
+
+.et-adress{
     width: 15em;
-    height: 3em;
-    background-color: green;
-    color: white;
-    border-radius: 0.5em;
+    padding-top: 0.4em;
+    padding-bottom: 0.4em;
+}
+
+
+@media screen and (max-width: 1200px) {
+    .content{
+        margin-left: 10rem;
+        margin-right: 10rem;
+    }
+
+    .flex-container {
+        display: flex;
+        justify-content: space-evenly;
+        flex-direction: column;
+    }
+
+    .flex-menu {
+        display: flex;
+        justify-content: left;
+        flex-direction: column;
+    }
+
+    .scroll-warenkorb {
+        align-self: left;
+        width: 8em;
+        height: 7em;
+    }
+
+    .et-adress{
+        width: 8em;
+        padding-top: 0.4em;
+        padding-bottom: 0.4em;
+    }
 }

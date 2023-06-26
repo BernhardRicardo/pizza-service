@@ -95,6 +95,7 @@ class Bestellung extends Page
     protected function generateView(): void
     {
         $data = $this->getViewData();
+<<<<<<< HEAD
         $this->generatePageHeader('Pizza Service', 'script.js','bestellung.css'); //to do: set optional parameters
 
         echo<<<HTML
@@ -107,6 +108,16 @@ class Bestellung extends Page
         echo<<<HTML
         <section class="speisekarte">
         <h2 class="textPrim">Bitte waehlen Sie Ihre Pizza aus:</h2>    
+=======
+        $this->generatePageHeader('Pizza Service', 'script.js', 'bestellung.css'); //to do: set optional parameters
+
+        echo <<< HTML
+        <section class = "content">
+            <h1>Bestellung</h1>
+            <hr>
+            <section class = "flex-container">
+                <section class = "menu">
+>>>>>>> 634c1332c1864fb23bdea07817dc1ad1493751ea
         HTML;
 
         for ($i = 0; $i < count($data); $i++) {
@@ -117,19 +128,29 @@ class Bestellung extends Page
             $price = $data[$i][2];
             $special_price = htmlspecialchars($price);
             echo <<< HTML
-            <article class="menu-container">
-            <img
-                width="100"
-                height="100"
-                src="../images/41J3qSlgJiL.jpg"
-                alt=$special_pizza_name
-                onclick="addToCart('$special_pizza_name','$special_price','$special_article_id')"
-            />
-            <h2>$special_pizza_name</h2>
-            <h3>$ $special_price</h3>
-            </article>
+            <section class = "flex-menu">
+                <section class = "p-image">
+                    <img
+                        width="100"
+                        height="100"
+                        src="../images/41J3qSlgJiL.jpg"
+                        alt=$special_pizza_name
+                        onclick="addToCart('$special_pizza_name','$special_price','$special_article_id')"
+                    />
+                </section>
+                <section class = "p-name">
+                    <p>&nbsp; $special_pizza_name &nbsp;&nbsp;</p>
+                </section>
+                <section class = "p-price">
+                    <p>$ $special_price</p>
+                </section>
+            </section>
             HTML;
         }
+        echo <<< HTML
+                </section>
+            <section class = "cart">
+        HTML;
 
         //close section class speisekarte
         echo<<<HTML
@@ -137,18 +158,26 @@ class Bestellung extends Page
         HTML;
 
         echo <<< HTML
-        <section class="warenkorb">
         <form action="bestellung.php" method="post">
-            <h1 class="textPrim">Warenkorb</h1>
-            <select class="bestellkorb" tabindex="1" name="pizza[]" id="cart" multiple="multiple" onchange="checkInputs()">
+            <p>Warenkorb</p>
+            <select class = "scroll-warenkorb" tabindex="1" name="pizza[]" id="cart" multiple="multiple" onchange="checkInputs()">
             </select>
-            <h1 id="total" class="textPrim">Price:</h1>
-            <h4 class="textPrim">Bitte geben Sie ihre Adresse ein:</h4>
-            <input class="adresse" name="Adresse" id="inputAddress" type="text" value="" placeholder="ihre Adresse" oninput="checkInputs()">
-            <button class="button" type="button" tabindex="2" accesskey="a" onclick="removeFromCart()">Auswahl Loeschen</button>
-            <button class="button" type="button" tabindex="3" accesskey="l" onclick="clearCart()">Alle Loeschen</button>
-            <button class="bestellen" tabindex="4" id="btnSubmit" type="submit" accesskey="b" value="Bestellen" onclick="selectAll()" disabled>Bestellen</button>
+            
+            <p id="total">Price:</p>
+            <section class = "carts-buttons">
+                <button type="button" tabindex="2" accesskey="a" onclick="removeFromCart()">Auswahl Loeschen</button>
+                <button type="button" tabindex="3" accesskey="l" onclick="clearCart()">Alle Loeschen</button>
+            </section>
+            <section class = "input-data">
+                <input name="Adresse" class = "et-adress" id="inputAddress" type="text" value="" placeholder="ihre Adresse" oninput="checkInputs()">
+                <button tabindex="4" id="btnSubmit" type="submit" accesskey="b" value="Bestellen" onclick="selectAll()" disabled>Bestellen</button>
+            </section>
         </form>
+        HTML;
+
+        echo <<< HTML
+                </section>
+            </section>
         </section>
         HTML;
 
