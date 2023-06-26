@@ -137,6 +137,11 @@ class Bestellung extends Page
             <section class = "cart">
         HTML;
 
+        //close section class speisekarte
+        echo<<<HTML
+        </section>
+        HTML;
+
         echo <<< HTML
         <form action="bestellung.php" method="post">
             <p>Warenkorb</p>
@@ -158,6 +163,11 @@ class Bestellung extends Page
         echo <<< HTML
                 </section>
             </section>
+        </section>
+        HTML;
+
+        //close section class content
+        echo<<<HTML
         </section>
         HTML;
         // to do: output view of this page

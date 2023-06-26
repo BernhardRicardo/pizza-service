@@ -97,7 +97,7 @@ class Fahrer extends Page
     protected function generateView(): void
     {
         $data = $this->getViewData();
-        $this->generatePageHeader('Fahrer Seite'); //to do: set optional parameters
+        $this->generatePageHeader('Fahrer Seite', '', 'fahrer.css'); //to do: set optional parameters
         // Output JavaScript code for automatic page refresh
         echo <<<HTML
         <script>
@@ -105,6 +105,15 @@ class Fahrer extends Page
             location.reload();
             }, 10000);
         </script>
+        HTML;
+
+        //section for content
+        echo <<<HTML
+        <section class="content">
+                <div>
+                    <h1>Fahrer</h1>
+                </div>
+                    <hr>
         HTML;
         $current_order_id = NULL;
         $pizza = "";
@@ -127,21 +136,31 @@ class Fahrer extends Page
                     $special_address = htmlspecialchars($data[$i - 1]['address']);
                     $special_ordering_id = htmlspecialchars($data[$i - 1]['ordering_id']);
                     echo <<<HTML
+                    <section class="order">
                     <form id="formid$special_ordering_id" action="fahrer.php" method="post">
-                        <h1>Bestellnummer: $special_ordering_id</h1>
-                        <h2>$special_address</h2>
-                        <h3>$special_pizza</h3>
+                        <fieldset>
+                        <p>Bestellnummer: $special_ordering_id</p>
+                        <p>$special_address</p>
+                        <p>$special_pizza</p>
+                        <section class="radio">
+                            <input type="radio" id="fertig" name="status" value="fertig" {$isFertig} onclick="document.forms['formid$special_ordering_id'].submit();" >
+                            <label for="fertig">fertig</label>
+                        </section>
+                        <section class="radio">
+                            <input type="radio" id="unterwegs" name="status" value="unterwegs" {$isUnterwegs} onclick="document.forms['formid$special_ordering_id'].submit();" >
+                            <label for="unterwegs">unterwegs</label>
+                        </section>
+                        <section class="radio">
+                            <input type="radio" id="geliefert" name="status" value="geliefert" {$isGeliefert} onclick="document.forms['formid$special_ordering_id'].submit();" >                    
+                            <label for="geliefert">geliefert</label>
+                        </section>
                         <input type="hidden" name="ordering_id" value="$current_order_id">
-                        <input type="radio" id="fertig" name="status" value="fertig" {$isFertig} onclick="document.forms['formid$special_ordering_id'].submit();" >
-                        <label for="fertig">fertig</label>
-                        <input type="radio" id="unterwegs" name="status" value="unterwegs" {$isUnterwegs} onclick="document.forms['formid$special_ordering_id'].submit();" >
-                        <label for="unterwegs">unterwegs</label>
-                        <input type="radio" id="geliefert" name="status" value="geliefert" {$isGeliefert} onclick="document.forms['formid$special_ordering_id'].submit();" >                    
-                        <label for="geliefert">geliefert</label>
                         <input type="hidden" name="ordering_id" value="{$data[$i-1]['ordering_id']}">
                         <br>
+                        </fieldset>
                     </form>
-HTML;
+                    </section>
+                    HTML;
                 }
             }
             if ($current_order_id != $data[$i]['ordering_id']) {
@@ -155,8 +174,10 @@ HTML;
                 $print = false;
             }
         }
-
-
+        //close section
+        echo <<<HTML
+        </section>
+        HTML;
         // to do: output view of this page
         $this->generatePageFooter();
     }
