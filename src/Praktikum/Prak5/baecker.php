@@ -98,6 +98,13 @@ class Baecker extends Page
         $data = $this->getViewData();
         
         $this->generatePageHeader('Baecker Seite'); //to do: set optional parameters
+        echo <<<HTML
+        <script>
+            setTimeout(function() {
+            location.reload();
+            }, 10000);
+        </script>
+        HTML;
 
         $current_ordering_id = NULL;
         for ($i = 0; $i < count($data); $i++) {
@@ -118,15 +125,15 @@ class Baecker extends Page
             <form id="formid$special_ordered_article_id" action="baecker.php" method="post">
                 <h2>Bestellung $special_current_id: $special_pizza_name</h2>
                 <label>Bestellt
-                    <input type="radio" name="order_status_{$data[$i]['ordered_article_id']}" value="bestellt" {$isBestellt} onclick="document.forms['formid$special_ordered_article_id'].submit();" ></td>
+                    <input type="radio" name="order_status_{$data[$i]['ordered_article_id']}" value="bestellt" {$isBestellt} onclick="document.forms['formid$special_ordered_article_id'].submit();" >
                 </label>
                 <label>
                     Im Ofen
-                    <input type="radio" name="order_status_{$data[$i]['ordered_article_id']}" value="im_offen" {$isImOffen} onclick="document.forms['formid$special_ordered_article_id'].submit();"></td>
+                    <input type="radio" name="order_status_{$data[$i]['ordered_article_id']}" value="im_offen" {$isImOffen} onclick="document.forms['formid$special_ordered_article_id'].submit();">
                 </label>
                 <label>
                     Fertig
-                    <input type="radio" name="order_status_{$data[$i]['ordered_article_id']}" value="fertig" {$isFertig} onclick="document.forms['formid$special_ordered_article_id'].submit();"></td>
+                    <input type="radio" name="order_status_{$data[$i]['ordered_article_id']}" value="fertig" {$isFertig} onclick="document.forms['formid$special_ordered_article_id'].submit();">
                 </label>
                 <input type="hidden" name="ordering_id" value="{$data[$i]['ordering_id']}">
                 <input type="hidden" name="ordered_article_id" value="{$data[$i]['ordered_article_id']}">
