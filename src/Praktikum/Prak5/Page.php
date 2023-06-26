@@ -99,6 +99,7 @@ abstract class Page
                 <meta charset="UTF-8">
                 <title>$title</title>
                 <script src='$jsFile'></script>
+                <link rel="stylesheet" href="base.css">
             </head>
             <body>
         HTML;
