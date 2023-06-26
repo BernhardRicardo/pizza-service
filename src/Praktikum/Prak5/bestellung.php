@@ -95,20 +95,6 @@ class Bestellung extends Page
     protected function generateView(): void
     {
         $data = $this->getViewData();
-<<<<<<< HEAD
-        $this->generatePageHeader('Pizza Service', 'script.js','bestellung.css'); //to do: set optional parameters
-
-        echo<<<HTML
-        <section class="content">
-        <h1 class="title">Bestellung</h1>
-        <fieldset></fieldset>
-        HTML;
-
-
-        echo<<<HTML
-        <section class="speisekarte">
-        <h2 class="textPrim">Bitte waehlen Sie Ihre Pizza aus:</h2>    
-=======
         $this->generatePageHeader('Pizza Service', 'script.js', 'bestellung.css'); //to do: set optional parameters
 
         echo <<< HTML
@@ -117,7 +103,6 @@ class Bestellung extends Page
             <hr>
             <section class = "flex-container">
                 <section class = "menu">
->>>>>>> 634c1332c1864fb23bdea07817dc1ad1493751ea
         HTML;
 
         for ($i = 0; $i < count($data); $i++) {
