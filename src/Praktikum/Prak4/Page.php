@@ -96,6 +96,9 @@ abstract class Page
         <!DOCTYPE html>
         <html lang="de">
             <head>
+            if ($autoreload) {
+                    <meta http-equiv="refresh" content="10"> // Refreshes every 10 seconds
+                }
                 <meta charset="UTF-8">
                 <title>$title</title>
                 <script src='$jsFile'></script>

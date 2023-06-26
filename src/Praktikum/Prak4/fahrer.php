@@ -119,13 +119,11 @@ class Fahrer extends Page
                     $special_address = htmlspecialchars($data[$i - 1]['address']);
                     $special_ordering_id = htmlspecialchars($data[$i - 1]['ordering_id']);
                     echo <<<HTML
+                    
                     <form id="formid$special_ordering_id" action="fahrer.php" method="post">
-                        <meta http-equiv="Refresh" content="10; URL=fahrer.php">
-                        <label><b>Bestellnummer: $special_ordering_id</b></label>
-                        <label><b>$special_address</b></label>
-                        <br>
-                        <label><b>$special_pizza</b></label>
-                        <br>
+                        <h1>Bestellnummer: $special_ordering_id</h1>
+                        <h2>$special_address</h2>
+                        <h3>$special_pizza</h3>
                         <input type="hidden" name="ordering_id" value="$current_order_id">
                         <input type="radio" name="status" value="fertig" {$isFertig} onclick="document.forms['formid$special_ordering_id'].submit();" >
                         <label for="html">fertig</label>
@@ -134,6 +132,7 @@ class Fahrer extends Page
                         <input type="radio" name="status" value="geliefert" {$isGeliefert} onclick="document.forms['formid$special_ordering_id'].submit();" >                    
                         <label for="html">geliefert</label>
                         <input type="hidden" name="ordering_id" value="{$data[$i-1]['ordering_id']}">
+                        <br>
                     </form>
 HTML;
                 }
