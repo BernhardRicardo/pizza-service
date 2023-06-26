@@ -95,7 +95,19 @@ class Bestellung extends Page
     protected function generateView(): void
     {
         $data = $this->getViewData();
-        $this->generatePageHeader('Pizza Service', 'script.js'); //to do: set optional parameters
+        $this->generatePageHeader('Pizza Service', 'script.js','bestellung.css'); //to do: set optional parameters
+
+        echo<<<HTML
+        <section class="content">
+        <h1 class="title">Bestellung</h1>
+        <fieldset></fieldset>
+        HTML;
+
+
+        echo<<<HTML
+        <section class="speisekarte">
+        <h2 class="textPrim">Bitte waehlen Sie Ihre Pizza aus:</h2>    
+        HTML;
 
         for ($i = 0; $i < count($data); $i++) {
             $article_id = $data[$i][0];
@@ -105,7 +117,7 @@ class Bestellung extends Page
             $price = $data[$i][2];
             $special_price = htmlspecialchars($price);
             echo <<< HTML
-            <section>
+            <article class="menu-container">
             <img
                 width="100"
                 height="100"
@@ -115,22 +127,33 @@ class Bestellung extends Page
             />
             <h2>$special_pizza_name</h2>
             <h3>$ $special_price</h3>
-            </section>\n
+            </article>
             HTML;
         }
 
+        //close section class speisekarte
+        echo<<<HTML
+        </section>
+        HTML;
+
         echo <<< HTML
-        <section>
+        <section class="warenkorb">
         <form action="bestellung.php" method="post">
-            <h1>Warenkorb</h1>
-            <select tabindex="1" name="pizza[]" id="cart" multiple="multiple" onchange="checkInputs()">
+            <h1 class="textPrim">Warenkorb</h1>
+            <select class="bestellkorb" tabindex="1" name="pizza[]" id="cart" multiple="multiple" onchange="checkInputs()">
             </select>
-            <p id="total">Price:</p>
-            <input name="Adresse" id="inputAddress" type="text" value="" placeholder="ihre Adresse" oninput="checkInputs()">
-            <button type="button" tabindex="2" accesskey="a" onclick="removeFromCart()">Auswahl Loeschen</button>
-            <button type="button" tabindex="3" accesskey="l" onclick="clearCart()">Alle Loeschen</button>
-            <button tabindex="4" id="btnSubmit" type="submit" accesskey="b" value="Bestellen" onclick="selectAll()" disabled>Bestellen</button>
+            <h1 id="total" class="textPrim">Price:</h1>
+            <h4 class="textPrim">Bitte geben Sie ihre Adresse ein:</h4>
+            <input class="adresse" name="Adresse" id="inputAddress" type="text" value="" placeholder="ihre Adresse" oninput="checkInputs()">
+            <button class="button" type="button" tabindex="2" accesskey="a" onclick="removeFromCart()">Auswahl Loeschen</button>
+            <button class="button" type="button" tabindex="3" accesskey="l" onclick="clearCart()">Alle Loeschen</button>
+            <button class="bestellen" tabindex="4" id="btnSubmit" type="submit" accesskey="b" value="Bestellen" onclick="selectAll()" disabled>Bestellen</button>
         </form>
+        </section>
+        HTML;
+
+        //close section class content
+        echo<<<HTML
         </section>
         HTML;
         // to do: output view of this page
