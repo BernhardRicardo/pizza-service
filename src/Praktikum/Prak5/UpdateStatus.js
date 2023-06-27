@@ -47,7 +47,6 @@ function process(jsonData) {
   //Make hr
   const hr = document.createElement("hr");
   statusContainer.appendChild(hr);
-  
 
   //Make paragraph for order id
   const orderId = document.createElement("p");
@@ -60,6 +59,9 @@ function process(jsonData) {
 
 
   jsonData.forEach(statusObj => {
+    //Make fieldset
+    const fieldset = document.createElement('fieldset');
+
     const statusElement = document.createElement("div");
     statusElement.classList.add("status");
 
@@ -97,7 +99,10 @@ function process(jsonData) {
         radio.checked = true;
       }
     }
-    statusContainer.appendChild(statusElement);
+    // Append the status element to the fieldset
+    fieldset.appendChild(statusElement);
+    
+    statusContainer.appendChild(fieldset);
   });
 }
 
