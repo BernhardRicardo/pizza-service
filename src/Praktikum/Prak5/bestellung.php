@@ -118,7 +118,7 @@ class Bestellung extends Page
                     <img
                         width="100"
                         height="100"
-                        src="../images/41J3qSlgJiL.jpg"
+                        src="../images/Pizza-PNG-Pic.png"
                         alt=$special_pizza_name
                         onclick="addToCart('$special_pizza_name','$special_price','$special_article_id')"
                     />
