@@ -52,9 +52,8 @@ function countTotalPrice() {
       total += parseFloat(Number(cart.options[i].price));
     }
   
-    console.log(total);
     totalElement.textContent = "Price: $" + total.toFixed(2).toString();
-  }
+}
   
 
 //clear cart
