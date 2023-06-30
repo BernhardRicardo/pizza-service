@@ -32,22 +32,50 @@ function process(jsonData) {
     statusContainer.removeChild(statusContainer.firstChild);
   }
 
+  
+  //Make h1 for kunde string
+  const kunde = document.createElement("h1");
+  kunde.textContent = "Kunde";
+  statusContainer.appendChild(kunde);
+  
+  //Make hr
+  const hr = document.createElement("hr");
+  statusContainer.appendChild(hr);
+
+  //make navbar
+  const navbar = document.createElement("div");
+  navbar.classList.add("topNav");
+  const nav1 = document.createElement("a");
+  nav1.textContent = "Bestellung";
+  nav1.href = "bestellung.php";
+  navbar.appendChild(nav1);
+  const nav2 = document.createElement("a");
+  nav2.textContent = "Baecker";
+  nav2.href = "baecker.php";
+  navbar.appendChild(nav2);
+  const nav3 = document.createElement("a");
+  nav3.textContent = "Fahrer";
+  nav3.href = "fahrer.php";
+  navbar.appendChild(nav3);
+  const nav4 = document.createElement("a");
+  nav4.textContent = "Kunde";
+  nav4.href = "kunde.php";
+  navbar.appendChild(nav4);
+  statusContainer.appendChild(navbar);
+  //style navbar
+  const nav = document.getElementsByClassName("topNav");
+  nav[0].setAttribute("class", "topnav")
+ 
+
+
+  
   if (jsonData.length === 0) {
     const noPizzaMessage = document.createElement("p");
     noPizzaMessage.textContent = "No pizzas available.";
     statusContainer.appendChild(noPizzaMessage);
     return;
   }
-
-  //Make h1 for kunde string
-  const kunde = document.createElement("h1");
-  kunde.textContent = "Kunde";
-  statusContainer.appendChild(kunde);
-
-  //Make hr
-  const hr = document.createElement("hr");
-  statusContainer.appendChild(hr);
-
+  
   //Make paragraph for order id
   const orderId = document.createElement("p");
   orderId.textContent = "Order ID: "+jsonData[0].ordering_id;

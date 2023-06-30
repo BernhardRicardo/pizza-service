@@ -114,6 +114,12 @@ class Fahrer extends Page
                     <h1>Fahrer</h1>
                 </div>
                     <hr>
+                <div class="topnav">
+                    <a class="active" href="bestellung.php">Bestellung</a>
+                    <a href="baecker.php">Baecker</a>
+                    <a href="fahrer.php">Fahrer</a>
+                    <a href="kunde.php">Kunde</a>
+                </div>
         HTML;
         $current_order_id = NULL;
         $pizza = "";
