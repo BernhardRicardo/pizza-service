@@ -101,6 +101,12 @@ class Bestellung extends Page
         <section class = "content">
             <h1>Bestellung</h1>
             <hr>
+            <div class="topnav">
+                <a class="active" href="bestellung.php">Bestellung</a>
+                <a href="baecker.php">Baecker</a>
+                <a href="fahrer.php">Fahrer</a>
+                <a href="kunde.php">Kunde</a>
+            </div>
             <section class = "flex-container">
                 <section class = "menu">
         HTML;
@@ -155,7 +161,7 @@ class Bestellung extends Page
             </section>
             <section class = "input-data">
                 <input name="Adresse" class = "et-adress" id="inputAddress" type="text" value="" placeholder="ihre Adresse" oninput="checkInputs()">
-                <button tabindex="4" id="btnSubmit" type="submit" accesskey="b" value="Bestellen" onclick="selectAll()" disabled>Bestellen</button>
+                <button tabindex="4" id="btnSubmit" type="submit" accesskey="b" value="Bestellen" onclick="selectAll(); window.open('http://localhost/Praktikum/Prak5/kunde.php');" disabled>Bestellen</button>
             </section>
         </form>
         HTML;
