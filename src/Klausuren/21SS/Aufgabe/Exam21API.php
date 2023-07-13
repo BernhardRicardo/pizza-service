@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 // UTF-8 marker äöüÄÖÜß€
 
 require_once './Page.php';
@@ -15,24 +17,37 @@ class Exam21API extends Page
         parent::__destruct();
     }
 
-    protected function getViewData():array
+    protected function getViewData(): array
     {
+        $spieler = array();
+        $sql = "SELECT *
+        FROM `gameDetails`
+        INNER JOIN `games` ON `games`.`id` = `gameDetails`.`gameId`
+        WHERE `gameDetails`.`gameId` = `games`.`id`";
+        $result = $this->_database->query($sql);
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                array_push($spieler, $row);
+            }
+        }
+        return $spieler;
     }
 
-    protected function generateView():void
+    protected function generateView(): void
     {
         header("Content-Type: application/json; charset=UTF-8");
         $data = $this->getViewData();
-        $serializedData = json_encode($data);
+        $total = count($data);
+        $serializedData = json_encode($total);
         echo $serializedData;
     }
 
-    protected function processReceivedData():void
+    protected function processReceivedData(): void
     {
         parent::processReceivedData();
     }
 
-    public static function main():void
+    public static function main(): void
     {
         try {
             $page = new Exam21API();
