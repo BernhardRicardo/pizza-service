@@ -1,10 +1,12 @@
 let request = new XMLHttpRequest();
 
-function process(string){
+function process(data){
     //parse the parameter to string
-    const data = JSON.parse(string);
-    //print it to html total
-    document.getElementById("total").textContent = data;
+    "use strict";
+    console.log(data);
+    let dataObject = JSON.parse(data)[0];
+    let players = document.getElementById("total");
+    players.firstChild.nodeValue = dataObject.playing;
 
 }
 
@@ -12,8 +14,9 @@ function process(string){
 function requestData() { // fordert die Daten asynchron an
     "use strict";
     //ToDo - vervollständigen **************
-    //take total from Exam21API.php
-    request.open("GET", "Exam21API.php", true);
+    //request the data
+    let gameId = document.getElementById("gameId").value;
+    request.open("GET", "Exam21API.php?gameId="+gameId);
     request.onreadystatechange = processData;
     request.send(null);
 }
@@ -30,3 +33,8 @@ function processData() {
     } // else; // Uebertragung laeuft noch
 }
 
+function pollData() {
+    "use strict";
+    requestData();
+    window.setInterval(requestData, 5000);
+}

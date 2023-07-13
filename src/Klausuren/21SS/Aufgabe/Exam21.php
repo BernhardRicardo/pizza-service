@@ -35,25 +35,41 @@ class Exam21 extends Page
 
     protected function generateView(): void
     {
+        $this->generatePageHeader();
         //data from the database
         $data = $this->getViewData();
-        //make the website html
-        //take the first data of the array
-        $specialdate = htmlspecialchars($data[0]['datetime']);
-        $specialteam = htmlspecialchars($data[0]['opposingTeam']);
-        $specialstatus = htmlspecialchars($data[0]['status']);
+        var_dump($data);
         echo <<<HTML
         <div class="header">
             <img src="Logo.png" width="200px" height="100px">
             <h1>Spielplanung</h1>
-            <form action="Exam21.php" method="post">
         </div> 
         
         <div class="info">
+        HTML;
+        $specialteam = "kein aktueles Spiel";
+        $specialdate ="";
+        $teamId;
+        $status;
+         //make the website html
+         for($i=0; $i<count($data); $i++){
+            if($data[$i]['status'] == 1 || $data[$i]['status'] == 2){
+                $specialdate = htmlspecialchars($data[0]['datetime']);
+                $specialteam = htmlspecialchars($data[0]['opposingTeam']);
+                $teamId=$data[0]['id'];
+                $status=$data[0]['status'];
+            }
+        }
+        echo<<<HTML
             <h2>$specialdate gegen $specialteam</h2>
             <p>Zusagen Spieler:innen</p>
-            <p id="total"></p>
-            <button type="submit"">Planung abschließen</button>   
+            <p id="total">?</p>
+            HTML;
+            echo <<<HTML
+            <form action="Exam21.php" method="post">
+            <button type="submit" name="finish">Planung abschließen</button>
+            <input type="hidden" name="team_id" value="teamId">
+            </form>
         </div>
         <div class="tabel">
         <p>Spiele</p>
@@ -63,7 +79,6 @@ class Exam21 extends Page
                 <th>Team</th>
                 <th>Status</th>
             </tr>
-            </form>
         HTML;
 
         //print the value from the data array
@@ -87,16 +102,24 @@ class Exam21 extends Page
                 <td>$specialstatus</td>
             </tr>
             HTML;
-
-            echo <<<HTML
+        }
+        echo <<<HTML
         </table>
         HTML;
-        }
+
+        $this->generatePageFooter();
     }
 
     protected function processReceivedData(): void
     {
         parent::processReceivedData();
+        //update the game status after submit
+        if (isset ($_POST['finish']) && isset($_POST['team_id'])) {
+            $teamId = $this->_database->real_escape_string($_POST["team_id"]); 
+            $sql = "UPDATE `games` SET status = 2 WHERE `games`.`id` = '$teamId'";
+            $this->_database->query($sql);
+        }
+
     }
 
     public static function main(): void

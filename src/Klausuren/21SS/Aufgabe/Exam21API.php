@@ -7,6 +7,7 @@ require_once './Page.php';
 
 class Exam21API extends Page
 {
+    private int $gameId = -1;
     protected function __construct()
     {
         parent::__construct();
@@ -19,11 +20,9 @@ class Exam21API extends Page
 
     protected function getViewData(): array
     {
+        //check if gameid is existing
         $spieler = array();
-        $sql = "SELECT *
-        FROM `gameDetails`
-        INNER JOIN `games` ON `games`.`id` = `gameDetails`.`gameId`
-        WHERE `gameDetails`.`gameId` = `games`.`id`";
+        $sql = "SELECT count(*) AS playing FROM gameDetails WHERE gameId = $this->gameId";
         $result = $this->_database->query($sql);
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
@@ -37,14 +36,17 @@ class Exam21API extends Page
     {
         header("Content-Type: application/json; charset=UTF-8");
         $data = $this->getViewData();
-        $total = count($data);
-        $serializedData = json_encode($total);
+        $serializedData = json_encode($data);
         echo $serializedData;
     }
 
     protected function processReceivedData(): void
     {
         parent::processReceivedData();
+        if (isset($_GET["gameId"]) && is_numeric($_GET["gameId"])) {
+            $this->gameId = (int) $_GET["gameId"];
+        }
+        
     }
 
     public static function main(): void
