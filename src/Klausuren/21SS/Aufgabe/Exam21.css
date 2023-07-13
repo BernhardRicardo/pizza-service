@@ -1,1 +1,13 @@
 /* Put your CSS code here! */
+header {
+    background-color: rgb(75, 75, 224);
+    color: white;
+    font-size: 2em;
+    text-align: center;
+    padding: 2em;
+}
+
+header img{
+    float: left;
+    height: 2em;
+}

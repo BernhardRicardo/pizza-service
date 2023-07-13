@@ -5,9 +5,8 @@ function process(data){
     "use strict";
     console.log(data);
     let dataObject = JSON.parse(data)[0];
-    let players = document.getElementById("total");
+    let players = document.getElementById("players");
     players.firstChild.nodeValue = dataObject.playing;
-
 }
 
 

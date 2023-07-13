@@ -35,15 +35,14 @@ class Exam21 extends Page
 
     protected function generateView(): void
     {
-        $this->generatePageHeader();
+        $this->generatePageHeader("Spielplanung");
         //data from the database
         $data = $this->getViewData();
-        var_dump($data);
         echo <<<HTML
-        <div class="header">
-            <img src="Logo.png" width="200px" height="100px">
+        <header>
+            <img src="Logo.png" >
             <h1>Spielplanung</h1>
-        </div> 
+        </header> 
         
         <div class="info">
         HTML;
@@ -62,13 +61,12 @@ class Exam21 extends Page
         }
         echo<<<HTML
             <h2>$specialdate gegen $specialteam</h2>
-            <p>Zusagen Spieler:innen</p>
-            <p id="total">?</p>
+            <h3>Zusagen Spieler:innen <span id="players">?</span></h3>
             HTML;
             echo <<<HTML
             <form action="Exam21.php" method="post">
-            <button type="submit" name="finish">Planung abschließen</button>
-            <input type="hidden" name="team_id" value="teamId">
+            <input type="submit" name="finish" value="Planung abschließen">
+            <input type="hidden" name="gameId" value="teamId">
             </form>
         </div>
         <div class="tabel">
@@ -114,10 +112,11 @@ class Exam21 extends Page
     {
         parent::processReceivedData();
         //update the game status after submit
-        if (isset ($_POST['finish']) && isset($_POST['team_id'])) {
-            $teamId = $this->_database->real_escape_string($_POST["team_id"]); 
-            $sql = "UPDATE `games` SET status = 2 WHERE `games`.`id` = '$teamId'";
+        if (isset ($_POST['finish']) && isset($_POST['gameId'])) {
+            $gameId = $this->_database->real_escape_string($_POST["gameId"]); 
+            $sql = "UPDATE `games` SET status = 2 WHERE `games`.`id` = '$gameId'";
             $this->_database->query($sql);
+            header("Location: Exam21.php");
         }
 
     }
