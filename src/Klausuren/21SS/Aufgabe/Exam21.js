@@ -15,7 +15,8 @@ function requestData() { // fordert die Daten asynchron an
     //ToDo - vervollständigen **************
     //request the data
     let gameId = document.getElementById("gameId").value;
-    request.open("GET", "Exam21API.php?gameId="+gameId);
+    console.log("hallo");
+    request.open("GET", "Exam21api.php?gameId="+gameId);
     request.onreadystatechange = processData;
     request.send(null);
 }
@@ -25,8 +26,8 @@ function processData() {
     if (request.readyState === 4) { // Uebertragung = DONE
         if (request.status === 200) { // HTTP-Status = OK
             if (request.responseText != null)
-            process(request.responseText)
-               ;//ToDo - vervollständigen ************
+            process(request.responseText);
+            //ToDo - vervollständigen ************
             else console.error("Dokument ist leer");
         } else console.error("Uebertragung fehlgeschlagen");
     } // else; // Uebertragung laeuft noch
@@ -37,3 +38,4 @@ function pollData() {
     requestData();
     window.setInterval(requestData, 5000);
 }
+window.setInterval(console.log("hallo"), 5000);

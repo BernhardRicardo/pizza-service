@@ -43,6 +43,7 @@ class Exam21API extends Page
     protected function processReceivedData(): void
     {
         parent::processReceivedData();
+        
         if (isset($_GET["gameId"]) && is_numeric($_GET["gameId"])) {
             $this->gameId = (int) $_GET["gameId"];
         }

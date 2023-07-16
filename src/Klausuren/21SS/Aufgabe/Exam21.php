@@ -39,6 +39,7 @@ class Exam21 extends Page
         //data from the database
         $data = $this->getViewData();
         echo <<<HTML
+        <body onload="pollData()">
         <header>
             <img src="Logo.png" >
             <h1>Spielplanung</h1>
@@ -65,8 +66,8 @@ class Exam21 extends Page
             HTML;
             echo <<<HTML
             <form action="Exam21.php" method="post">
-            <input type="submit" name="finish" value="Planung abschließen">
-            <input type="hidden" name="gameId" value="teamId">
+            <input type="submit" name="finish" value="Planung abschließen" onclick="function(event){event.preventDefault();}"/>
+            <input type="hidden" name="gameId" id="gameId" value="$teamId">
             </form>
         </div>
         <div class="tabel">
@@ -103,6 +104,7 @@ class Exam21 extends Page
         }
         echo <<<HTML
         </table>
+        </body>
         HTML;
 
         $this->generatePageFooter();
@@ -113,10 +115,9 @@ class Exam21 extends Page
         parent::processReceivedData();
         //update the game status after submit
         if (isset ($_POST['finish']) && isset($_POST['gameId'])) {
-            $gameId = $this->_database->real_escape_string($_POST["gameId"]); 
-            $sql = "UPDATE `games` SET status = 2 WHERE `games`.`id` = '$gameId'";
+            $Id = $this->_database->real_escape_string($_POST["gameId"]); 
+            $sql = "UPDATE `games` SET status = 2 WHERE `games`.`id` = '$Id'";
             $this->_database->query($sql);
-            header("Location: Exam21.php");
         }
 
     }
