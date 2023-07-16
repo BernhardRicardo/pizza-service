@@ -1,4 +1,8 @@
 /* Put your CSS code here! */
+
+body{
+    width: 50em;
+}
 header {
     background-color: rgb(75, 75, 224);
     color: white;
@@ -10,4 +14,14 @@ header {
 header img{
     float: left;
     height: 2em;
+}
+
+.info{
+    margin-top: 1em;
+    margin-bottom: 1em;
+    background-color: white;
+    border-radius: 2rem;
+    text-align: center;
+    box-shadow: 10em rgb(0,0,0,255);
+    padding: 1em;
 }
