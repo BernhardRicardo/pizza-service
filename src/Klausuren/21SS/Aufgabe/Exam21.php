@@ -48,23 +48,23 @@ class Exam21 extends Page
         <div class="info">
         HTML;
         $specialteam = "kein aktueles Spiel";
-        $specialdate ="";
-        $teamId;
-        $status;
-         //make the website html
-         for($i=0; $i<count($data); $i++){
-            if($data[$i]['status'] == 1 || $data[$i]['status'] == 2){
+        $specialdate = "";
+        $teamId = "";
+        $status = "";
+        //make the website html
+        for ($i = 0; $i < count($data); $i++) {
+            if ($data[$i]['status'] == 1 || $data[$i]['status'] == 2) {
                 $specialdate = htmlspecialchars($data[0]['datetime']);
                 $specialteam = htmlspecialchars($data[0]['opposingTeam']);
-                $teamId=$data[0]['id'];
-                $status=$data[0]['status'];
+                $teamId = $data[0]['id'];
+                $status = $data[0]['status'];
             }
         }
-        echo<<<HTML
+        echo <<<HTML
             <h2>$specialdate gegen $specialteam</h2>
             <h3>Zusagen Spieler:innen <span id="players">?</span></h3>
             HTML;
-            echo <<<HTML
+        echo <<<HTML
             <form action="Exam21.php" method="post">
             <input type="submit" name="finish" value="Planung abschließen" onclick="function(event){event.preventDefault();}"/>
             <input type="hidden" name="gameId" id="gameId" value="$teamId">
@@ -114,12 +114,11 @@ class Exam21 extends Page
     {
         parent::processReceivedData();
         //update the game status after submit
-        if (isset ($_POST['finish']) && isset($_POST['gameId'])) {
-            $Id = $this->_database->real_escape_string($_POST["gameId"]); 
+        if (isset($_POST['finish']) && isset($_POST['gameId'])) {
+            $Id = $this->_database->real_escape_string($_POST["gameId"]);
             $sql = "UPDATE `games` SET status = 2 WHERE `games`.`id` = '$Id'";
             $this->_database->query($sql);
         }
-
     }
 
     public static function main(): void
