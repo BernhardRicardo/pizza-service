@@ -71,7 +71,7 @@ class Exam21 extends Page
             </form>
         </div>
         <div class="tabel">
-        <p>Spiele</p>
+        <h1 id="spiel">Spiele</h1>
         <table>
             <tr>
                 <th>Datum</th>
@@ -118,6 +118,10 @@ class Exam21 extends Page
             $Id = $this->_database->real_escape_string($_POST["gameId"]);
             $sql = "UPDATE `games` SET status = 2 WHERE `games`.`id` = '$Id'";
             $this->_database->query($sql);
+            // Weiterleitung nach PRG-Pattern
+            header("HTTP/1.1 303 See Other");
+            header("Location: " . "Exam21.php");
+            die(); // hier ausnahmsweise ok !
         }
     }
 
