@@ -12,13 +12,6 @@ function wordClickHandler(){
     console.log(word);
 }
 
-function RegisterWordClickHandler(){
-    'use strict';
-    let body = document.getElementsByTagName('body')[0];
-    if(body){
-        body.addEventListener('dblclick', wordClickHandler);
-    }
-}
 
 function requestData(Text){
     'use strict';
