@@ -24,6 +24,8 @@ function processData(){
             }else{
                 console.error('Dokument ist leer');
             }
+        }else{
+            console.error('Uebertragung fehlgeschlagen');
         }
 }
 }
@@ -31,10 +33,11 @@ function processData(){
 function processExplanation(jsonData){
     'use strict';
     let dataObject = JSON.parse(jsonData);
+    //add node to UL
     addExplanationNode(dataObject.word, dataObject.explanation);
 }
 
 function addExplanationNode(word, explanation){
-    
-    
+
 }
+
