@@ -1,1 +1,66 @@
 /* Ergänzen Sie hier Ihre CSS-Lösung */
+body {
+    font-family: "Century Gothic", sans-serif;
+}
+
+main{
+    display: flex;
+    flex-direction: row;
+    background: white;
+    overflow: hidden;
+}
+
+main article{
+    background: white;
+}
+header, nav, main, footer, .simple {
+    border: 0.1em solid black;
+    border-radius: 1em;
+}
+
+nav{
+    text-align: center;
+    background: gainsboro;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+nav a {
+    color: #000000;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 17px;
+  }
+
+header{
+    background: darkgrey;
+    color: #fff;
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+}
+
+footer{
+    margin-top: 1rem;
+    text-align: center;
+    font-size: 1rem;
+}
+.simple{
+    justify-content: left;
+    margin-left: 1rem;
+    width: 15em;
+}
+
+.maincontainer{
+    justify-content: right;
+    margin-left: 1rem;
+    width: 40em;
+}
+
+article{
+    margin-left: 1rem;
+    margin-right: 1rem;
+    width: 25%;
+}

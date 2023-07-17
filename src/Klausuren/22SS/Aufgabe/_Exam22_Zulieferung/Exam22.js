@@ -2,17 +2,31 @@
 let request = new XMLHttpRequest();
 function wordClickHandler(){
     'use strict';
+    let word;
     //get the word from the clicked element
-    let word = window.getSelection().toString();
-    request(word);
+    if(window.getSelection().toString().length > 1){
+    word = window.getSelection().toString();
+    //request the explanation
+    requestData(word);
+    }
+    console.log(word);
 }
 
-function request(Text){
+function RegisterWordClickHandler(){
+    'use strict';
+    let body = document.getElementsByTagName('body')[0];
+    if(body){
+        body.addEventListener('dblclick', wordClickHandler);
+    }
+}
+
+function requestData(Text){
     'use strict';
     //request the result from Exam22API.php
-    request.open('GET', 'Exam22API.php?search='+Text, true);
-    request.send();
-    request.onreadystatechange = null;
+    request.open('GET', 'Exam22API.php?search='+Text);
+    request.onreadystatechange = processData;
+    request.send(null);
+
 }
 
 function processData(){
@@ -33,11 +47,21 @@ function processData(){
 function processExplanation(jsonData){
     'use strict';
     let dataObject = JSON.parse(jsonData);
-    //add node to UL
-    addExplanationNode(dataObject.word, dataObject.explanation);
+    let ulExplanationsNode = document.getElementById('Definition');
+    if(ulExplanationsNode){
+        deleteAllChildren(ulExplanationsNode);
+        let node = document.createElement('li');
+        let textNode = document.createTextNode(dataObject.word + ': ' + dataObject.explanation);
+        node.appendChild(textNode);
+        ulExplanationsNode.appendChild(node);
+    }
 }
 
-function addExplanationNode(word, explanation){
-
+function deleteAllChildren(node){
+    'use strict';
+    while(node.firstChild){
+        node.removeChild(node.firstChild);
+    }
 }
+
 

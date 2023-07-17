@@ -15,7 +15,6 @@ function requestData() { // fordert die Daten asynchron an
     //ToDo - vervollständigen **************
     //request the data
     let gameId = document.getElementById("gameId").value;
-    console.log("hallo");
     request.open("GET", "Exam21api.php?gameId="+gameId);
     request.onreadystatechange = processData;
     request.send(null);
@@ -38,4 +37,3 @@ function pollData() {
     requestData();
     window.setInterval(requestData, 5000);
 }
-window.setInterval(console.log("hallo"), 5000);
