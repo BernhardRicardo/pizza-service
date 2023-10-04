@@ -99,7 +99,7 @@ class Bestellung extends Page
 
         echo <<< HTML
         <section class = "content">
-            <h1>Bestellung</h1>
+            <h1>Menu</h1>
             <hr>
             <section class = "flex-container">
                 <section class = "menu">
@@ -112,13 +112,14 @@ class Bestellung extends Page
             $special_pizza_name = htmlspecialchars($pizza_name);
             $price = $data[$i][2];
             $special_price = htmlspecialchars($price);
+            $picture = "../images/" . $special_pizza_name . ".png";
             echo <<< HTML
             <section class = "flex-menu">
                 <section class = "p-image">
                     <img
                         width="100"
                         height="100"
-                        src="../images/Pizza-PNG-Pic.png"
+                        src=$picture
                         alt=$special_pizza_name
                         onclick="addToCart('$special_pizza_name','$special_price','$special_article_id')"
                     />
@@ -143,19 +144,21 @@ class Bestellung extends Page
         HTML;
 
         echo <<< HTML
-        <form action="bestellung.php" method="post">
-            <p>Warenkorb</p>
+        <form class="box" action="bestellung.php" method="post">
+            <p>Cart</p>
             <select class = "scroll-warenkorb" tabindex="1" name="pizza[]" id="cart" multiple="multiple" onchange="checkInputs()">
             </select>
             
             <p id="total">Price:</p>
             <section class = "carts-buttons">
-                <button type="button" tabindex="2" accesskey="a" onclick="removeFromCart()">Auswahl Loeschen</button>
-                <button type="button" tabindex="3" accesskey="l" onclick="clearCart()">Alle Loeschen</button>
+                <button type="button" tabindex="2" accesskey="a" onclick="removeFromCart()">Delete</button>
+                <button type="button" tabindex="3" accesskey="l" onclick="clearCart()">Clear cart</button>
             </section>
             <section class = "input-data">
-                <input name="Adresse" class = "et-adress" id="inputAddress" type="text" value="" placeholder="ihre Adresse" oninput="checkInputs()">
-                <button tabindex="4" id="btnSubmit" type="submit" accesskey="b" value="Bestellen" onclick="selectAll()" disabled>Bestellen</button>
+                <input name="Adresse" class = "et-adress" id="inputAddress" type="text" value="" placeholder="Input address" oninput="checkInputs()">
+            </section>
+            <section class="button-submit">
+                <button class="bn-orange" tabindex="4" id="btnSubmit" type="submit" accesskey="b" value="Bestellen" onclick="selectAll()" disabled>Submit</button>
             </section>
         </form>
         HTML;

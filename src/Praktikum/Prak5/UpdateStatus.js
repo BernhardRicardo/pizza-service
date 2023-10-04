@@ -41,7 +41,7 @@ function process(jsonData) {
 
   //Make h1 for kunde string
   const kunde = document.createElement("h1");
-  kunde.textContent = "Kunde";
+  kunde.textContent = "Customer";
   statusContainer.appendChild(kunde);
 
   //Make hr
@@ -80,15 +80,15 @@ function process(jsonData) {
   
       const label = document.createElement("label");
       if(i== 0) {
-      label.textContent = "Bestellt";
+      label.textContent = "Ordered";
       } else if(i == 1) {
-        label.textContent = "Im Offen";
+        label.textContent = "In oven";
       } else if(i == 2) {
-        label.textContent = "Fertig";
+        label.textContent = "Ready to deliver";
       } else if(i == 3) {
-        label.textContent = "unterwegs";
+        label.textContent = "On the way";
       } else if(i == 4) {
-        label.textContent = "Geliefert";
+        label.textContent = "Delivered";
       }
       statusElement.appendChild(label);
       // Add spacing between radio buttons
