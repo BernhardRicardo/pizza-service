@@ -106,7 +106,7 @@ class Baecker extends Page
         </script>
         <div class="content">
             <div>
-                <h1>Bäcker</h1>
+                <h1>Backer</h1>
             </div>
             <hr>
             <div class="topnav">
@@ -136,21 +136,21 @@ class Baecker extends Page
             <div class = order>
                 <form id="formid$special_ordered_article_id" action="baecker.php" method="post">
                     <fieldset>
-                    <p>Bestellung $special_current_id: $special_pizza_name</ß2>
+                    <p>Order $special_current_id: $special_pizza_name</ß2>
                     <div class = radio>
-                        <label>Bestellt
+                        <label>Ordered
                             <input type="radio" name="order_status_{$data[$i]['ordered_article_id']}" value="bestellt" {$isBestellt} onclick="document.forms['formid$special_ordered_article_id'].submit();" >
                         </label>
                     </div>
                     <div class = radio>
                         <label>
-                            Im Ofen
+                            In oven
                             <input type="radio" name="order_status_{$data[$i]['ordered_article_id']}" value="im_offen" {$isImOffen} onclick="document.forms['formid$special_ordered_article_id'].submit();">
                         </label>
                     </div>
                     <div class = radio>
                         <label>
-                            Fertig
+                            Ready to deliver
                             <input type="radio" name="order_status_{$data[$i]['ordered_article_id']}" value="fertig" {$isFertig} onclick="document.forms['formid$special_ordered_article_id'].submit();">
                         </label>
                     </div>  

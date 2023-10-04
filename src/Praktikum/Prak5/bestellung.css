@@ -1,14 +1,14 @@
 .content{
-    background-color: #F7D6A6;
-    padding: 20px;
+    background-color: #f6eee2;
+    padding: 10px;
     margin-left: 17rem;
-    margin-right: 15rem;
-    margin-top: 5rem;
-    padding-bottom: 5rem;
+    margin-right: 17rem;
+    margin-top: 2rem;
+    padding-bottom: 2rem;
     border-radius: 10px;
     box-shadow: 0px 0px 10px 0px #000000;
     text-align: center;
-    outline: 1px solid FFECDD;
+    outline: 1px solid;
 }
 
 hr{
@@ -41,9 +41,11 @@ hr{
 }
 
 .scroll-warenkorb {
+    background-color: #faebd7;
     align-self: left;
     width: 25em;
     height: 7em;
+    overflow-y: auto;
 }
 
 .carts-buttons {
@@ -55,11 +57,20 @@ hr{
 }
 
 .et-adress{
-    width: 15em;
+    width: 24em;
     padding-top: 0.4em;
     padding-bottom: 0.4em;
 }
 
+.box{
+    position: relative;
+}
+
+.button-submit{
+    display: flex;
+    justify-content: right;
+    padding-top: 5rem;
+}
 
 @media screen and (max-width: 1200px) {
     .content{

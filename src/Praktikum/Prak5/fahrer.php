@@ -111,7 +111,7 @@ class Fahrer extends Page
         echo <<<HTML
         <section class="content">
                 <div>
-                    <h1>Fahrer</h1>
+                    <h1>Delivery</h1>
                 </div>
                     <hr>
                 <div class="topnav">
@@ -145,20 +145,20 @@ class Fahrer extends Page
                     <section class="order">
                     <form id="formid$special_ordering_id" action="fahrer.php" method="post">
                         <fieldset>
-                        <p>Bestellnummer: $special_ordering_id</p>
+                        <p>Order number: $special_ordering_id</p>
                         <p>$special_address</p>
                         <p>$special_pizza</p>
                         <section class="radio">
                             <input type="radio" id="fertig" name="status" value="fertig" {$isFertig} onclick="document.forms['formid$special_ordering_id'].submit();" >
-                            <label for="fertig">fertig</label>
+                            <label for="fertig">Ready to deliver</label>
                         </section>
                         <section class="radio">
                             <input type="radio" id="unterwegs" name="status" value="unterwegs" {$isUnterwegs} onclick="document.forms['formid$special_ordering_id'].submit();" >
-                            <label for="unterwegs">unterwegs</label>
+                            <label for="unterwegs">On the way</label>
                         </section>
                         <section class="radio">
                             <input type="radio" id="geliefert" name="status" value="geliefert" {$isGeliefert} onclick="document.forms['formid$special_ordering_id'].submit();" >                    
-                            <label for="geliefert">geliefert</label>
+                            <label for="geliefert">delivered</label>
                         </section>
                         <input type="hidden" name="ordering_id" value="$current_order_id">
                         <input type="hidden" name="ordering_id" value="{$data[$i-1]['ordering_id']}">

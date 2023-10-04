@@ -99,8 +99,16 @@ abstract class Page
                 <meta charset="UTF-8">
                 <title>$title</title>
                 <script src='$jsFile'></script>
+                <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300&display=swap" rel="stylesheet">
                 <link rel="stylesheet" href="base.css">
                 <link rel="stylesheet" href="$style">
+                <h1 class="title">PIPES</h1>
+                <img 
+                    class="flag"
+                    src="../images/italian-flag.png" 
+                    alt="italian-flag"
+                    width= "150"
+                    height= "5">
             </head>
             <body>
         HTML;
